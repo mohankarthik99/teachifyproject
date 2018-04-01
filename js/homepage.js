@@ -117,7 +117,7 @@ function nameListener(auth){
 	docref.where("UID","==",auth.currentUser.uid).onSnapshot((querySnapshot)=>{
 querySnapshot.forEach((doc)=>{
 	if(doc.exists){
-		document.querySelector("#username").innerHTML="User->"+(doc.data().name);
+		document.querySelector("#username").innerHTML=(doc.data().name);
 }
 });
 
@@ -200,7 +200,11 @@ if (subjects) {
 //Uploads for teachers
 
 
-
+var uploadpage=document.querySelector("#uploadpage");
+uploadpage.addEventListener("click",(event)=>{
+event.preventDefault();
+window.open("uploads.html?uid="+document.querySelector('#username').innerHTML+"&","_self");
+});
 
 
 logout.addEventListener("click",function(){ //Logout button
