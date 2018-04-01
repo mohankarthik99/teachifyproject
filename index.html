@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Panimalar Teachers</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+<!--===============================================================================================-->	
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<button>Click me</button>
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				<form  class="login100-form validate-form" onsubmit="event.preventDefault();">
+					<span class="login100-form-title p-b-49">
+						Login
+					</span>
+
+					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
+						<span class="label-input100">Email</span>
+						<input class="input100" id="email" type="text" name="username" placeholder="Type your email">
+						<span class="focus-input100" data-symbol="&#xf206;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Password is required">
+						<span class="label-input100">Password</span>
+						<input class="input100" id="pass" type="password" name="pass" placeholder="Type your password">
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
+					</div>
+					
+					<br>
+					<br>
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button id="login" class="login100-form-btn">
+								Login
+							</button>
+						</div>
+					</div>
+<br>
+						<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+
+							<a id="demo01" href="#animatedModal"><button class="login100-form-btn">SignUp (Administrators) </button></a>
+													</div>
+					</div>
+
+
+
+				</form>
+					
+			</div>
+		</div>
+	</div>
+	
+
+
+  <div id="animatedModal" class="img-responsive" style="background: red;">
+        <!--THIS IS IMPORTANT! to close the modal, the class name has to match the name given on the ID  class="close-animatedModal" -->
+      
+         
+        <div class="modal-content" style="border:none">
+		<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+						<div class="wrap-login1001 p-l-55 p-r-55" style="padding-top: 13px;">
+							 <div class="close-animatedModal"> 
+        	<div class="justifycorner">
+<i class="fa fa-times-circle fa-3x text-center" style="color: #333333" aria-hidden="true"></i>
+</div>
+        </div>
+				<form  class="login100-form validate-form">
+					<span class="login100-form-title p-b-49 rg">
+						Register Staff
+					</span>
+                    <div class="wrap-input100 validate-input m-b-23" data-validate = "Name is required">
+						<span class="label-input100">Name</span>
+						<input class="input100" id="nameassign" type="text" name="name" placeholder="Type your Name"  required>
+						<span class="focus-input100" data-symbol="&#xf206;"></span>
+					</div>
+					<div class="wrap-input100 validate-input m-b-23" data-validate = "Email is reauired">
+						<span class="label-input100">Email</span>
+						<input class="input100" id="emailsign" type="text" name="username" placeholder="Type your email"  required>
+						<span class="focus-input100" data-symbol="&#xf206;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Password is required">
+						<span class="label-input100">Password</span>
+						<input class="input100" id="passsign" type="password" name="pass" placeholder="Type your password"  required>
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
+					</div>
+					<br>
+					<div class="wrap-input100 validate-input" data-validate="Admin pin is required">
+						<span class="label-input100">Admin Pin</span>
+						<input class="input100" id="adminpin" type="password" name="pin" placeholder="Type your password"  required>
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
+					</div>
+					
+					<br>
+					<br>
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button id="signup" class="login100-form-btn">
+								Signup
+							</button>
+						</div>
+					</div>
+<br>
+						</form>
+					</div>
+					
+	</div>
+</div>
+                   
+        </div>
+</div>	
+<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+		 <script src="js/animatedModal.min.js"></script>
+		 <script>
+  $("#demo01").animatedModal();
+</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.0.1/dist/loadingoverlay.min.js"></script>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+	<script src="js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	
+<!--===============================================================================================-->
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script>
+	  var config = {
+    apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
+    authDomain: "teachifyppc.firebaseapp.com",
+    databaseURL: "https://teachifyppc.firebaseio.com",
+    projectId: "teachifyppc",
+    storageBucket: "teachifyppc.appspot.com",
+    messagingSenderId: "702587918647"
+  };
+  firebase.initializeApp(config);
+</script>
+
+	<script src="js/app.js"></script>
+
+
+</body>
+</html>

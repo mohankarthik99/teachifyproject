@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Uploads</title>
+	<link rel="stylesheet" href="css/hamburgers.min.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+	<nav id="menu" class="slideout-menu">
+  <header>
+  <h3 class="fontbold text-center">Dashboard</h3>
+  <br>
+  <br>
+  <ul class="navown">
+  	<li><a href="home.html">Home</a></li>
+  	<hr>
+  	<li>Upload history</li>
+  	<hr>
+  	<li id="active-li">New Upload</li>
+  	<hr>
+  	<li>User Profile</li>
+  	  	<li>Logout</li>
+
+  </ul>
+  
+  </header>
+</nav>
+
+  <header class="head">
+<button style="color:white" class="hamburger hamburger--arrowalt" id="cool" type="button">
+  <span class="hamburger-box">
+    <span style="background: white" class="hamburger-inner"></span>
+  </span>
+</button>
+      </header>
+
+
+<main id="panel" class="slideout-panel">
+		<div class="container-fluid">
+		<div class="row">
+           <div class="col-sm-12"> <!-- our content area -->
+           	<div class="flexit" style="background:#d10fe2;color: white">
+           		       		<h2 class="fontsemibold text-center">Create a New Upload</h2>
+
+           	</div>
+	    <input type="file" name="" id="uploader" onchange="execute(event,this)">
+	<p>Please note that ur files should be lesser than 8mb</p>
+	<progress value="0">25%</progress>
+	<input type="text" class="get">
+	<button onclick="addData()">Click me</button>
+       	</div>
+       </div>
+   </div>
+
+
+	
+</main>
+	
+
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
+    authDomain: "teachifyppc.firebaseapp.com",
+    databaseURL: "https://teachifyppc.firebaseio.com",
+    projectId: "teachifyppc",
+    storageBucket: "teachifyppc.appspot.com",
+    messagingSenderId: "702587918647"
+  };
+  firebase.initializeApp(config);
+</script>
+<script src="js/slideout.min.js"></script>
+
+<script type="text/javascript">
+    var slideout = new Slideout({
+    'panel': document.getElementById('panel'),
+    'menu': document.getElementById('menu'),
+    'padding': 225,
+    'tolerance': 70
+  });
+   document.querySelector('#cool').addEventListener('click', function() {
+    this.classList.toggle("is-active");
+    slideout.toggle();
+  });
+
+ 
+
+var fixed = document.querySelector('.head');
+
+slideout.on('translate', function(translated) {
+  fixed.style.transform = 'translateX(' + translated + 'px)';
+});
+
+slideout.on('beforeopen', function () {
+  fixed.style.transition = 'transform 300ms ease';
+  fixed.style.transform = 'translateX(225px)';
+});
+
+slideout.on('beforeclose', function () {
+  fixed.style.transition = 'transform 300ms ease';
+  fixed.style.transform = 'translateX(0px)';
+});
+
+slideout.on('open', function () {
+  fixed.style.transition = '';
+});
+
+slideout.on('close', function () {
+  fixed.style.transition = '';
+});
+
+	var a;
+	var p=document.querySelector("p");
+	var txtbox=document.querySelector(".get");
+							const firestore=firebase.firestore();
+
+
+	function execute(event,elem){
+					const store=firebase.storage();
+		var formats={
+			documents:["doc","docx","rtf","txt","odt","ppt","pptx","pdf","srt"],
+			images:["jpeg","jpg","png","bmp","gif","tiff"]
+		           }
+var metaData={
+	contentType:"",
+	size:""
+}
+		file=elem.files[0];
+				metaData.size=file.size;
+				console.log(metaData.size);
+			var type=file.name.substring(file.name.lastIndexOf(".")+1,file.name.length).toLowerCase();
+var iterate= function(data,types){
+formats[data].forEach((datas)=>{
+            if(datas==type){
+            	metaData.contentType=types;
+            }
+});
+}
+			
+iterate("documents","Docs");
+iterate("images","images");
+
+if(!(metaData.contentType)){
+return alert("Please upload a valid format");
+}
+		var ref=store.ref('docs/'+file.name);
+
+		var task=ref.put(file,metaData);
+
+           task.on('state_changed',(snapshot)=>{
+           	document.querySelector("progress").value=(snapshot.bytesTransferred/snapshot.totalBytes*100);
+           },function(error){
+           	alert("Something went wrong,Size must be lesser than 8mb"+error.message);
+           },function complete(){
+           console.log(task.snapshot.downloadURL);
+           });
+
+
+
+	}
+function addData(){
+
+	var reference=firestore.collection("Teacheruploads");
+     
+     reference.get().then((data)=>{
+     	console.log("entered");
+     	data.forEach((docs)=>{
+         reference.doc(docs.id).update({
+         	'uploadInfo.uid':'someuserid'
+         }).then(()=>{
+         	console.log("Successfully updated")
+         }).catch((error)=>{
+         	console.log(error.message);
+         })
+     		
+     	});
+     }).catch((error)=>{
+     	p.innerHTML=error.message;
+        p.style.color="red;"
+     })
+
+}
+	
+</script>
+
+</body>
+</html>

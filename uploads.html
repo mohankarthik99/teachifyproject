@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Uploads</title>
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="css/hamburgers.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+  <nav id="menu" class="slideout-menu">
+  <header>
+  <h3 class="fontbold text-center">Dashboard</h3>
+  <br>
+  <br>
+  <ul class="navown">
+    <li><a href="home.html">Home</a></li>
+    <hr>
+    <li><a href="">Upload history</a></li>
+    <hr>
+    <li id="active-li"><a href="uploads.html">New Upload</a></li>
+    <hr>
+    <li><a href="">User Profile</a></li>
+        <li id="logout"><a href="">Logout</a></li>
+
+  </ul>
+  
+  </header>
+</nav>
+
+  <header class="head">
+<button style="color:white" class="hamburger hamburger--arrowalt" id="cool" type="button">
+  <span class="hamburger-box">
+    <span style="background: white" class="hamburger-inner"></span>
+  </span>
+</button>
+      </header>
+
+
+<main id="panel" class="slideout-panel">
+    <div class="container-fluid">
+    <div class="row">
+           <div class="col-sm-12"> <!-- our content area -->
+                        <h2 class="fontsemibold text-center shade">Create a New Upload</h2>
+<div class="row">
+   <div class="col-md-4 pushdown col-sm-12">
+    <h4>Year :</h4>
+  <select id="uploadYear" class="extend" style="padding: 10px 5px;">
+    <option value="firstyear">I year</option>
+    <option value="secondyear">II year</option>
+</select>
+     <!-- Selecting the year -->
+
+  </div>
+
+  <div class="col-md-4 pushdown col-sm-6">
+        <h4>Department :</h4>
+    <select id="uploadDept" class="extend" style="padding: 10px 5px;">   <!-- Selecting the department -->
+      <option>Please select the Year</option>
+<!--       <option value="mech">Mechanical</option>
+<option value="cse">Computer science</option>
+<option value="eee">Electrical &amp; Electronics</option>
+<option value="ece">Electrical communication Engineering</option> -->
+    </select>
+
+  </div>
+  <div class="col-md-4 pushdown col-sm-6">
+        <h4>Subject</h4>
+    <select class="extend" style="padding: 10px 5px;">
+      <option>Please select the Department</option>
+    </select>
+  </div>
+
+ 
+</div><!-- //options row -->
+
+<div class="row">
+  <div class="col-md-4">
+    <div class='card'>
+      <h3 style="color: #000" id="titlecard">Title</h3>
+<img src="images/image-file.png"  style="width:90px;height: 90px"    alt="">
+
+<h3 class="fontbold" style="color: #000;padding:5px 0px">Description</h3>
+
+      <p class="text-center"  id="desccard">Let students know what this is about here.......</p></div>
+  </div> <!-- Card view -->
+
+  <div class="col-md-8">
+    <form onsubmit="execute(event)">
+
+  <div class="form-group">
+    <label for="exampleInputTitle">Title</label>
+    <input type="text" class="form-control resetpadding" id="titletxt" placeholder="Enter Title">
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputUpload">Upload File</label>
+      <input type="file"  class="form-control resetpadding"  id="uploader">
+        <p  class="Poppins-Regular" style="color: red;font-style: bold">* Please note that your files should be lesser than 8mb</p>
+
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputComments">Description</label>
+    <input type="text" class="form-control resetpadding" id="desctxt" placeholder="Password">
+  </div>
+
+  <button class="btn btn-info extend fontsemibold text-center" id="pushcloud">Upload everything</button>
+  <br>
+  <br>
+            <progress class="extend" value="0"></progress>
+
+</form>
+
+  </div> <!-- Form for the user
+  </div> -->
+        </div>
+        <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-title">
+        <h4 class="text-center fontsemibold" style="color: #000"><i class="fa fa-exclamation-triangle" aria-hidden="true" style="color: red;"></i>   Invalid format</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+                          <p>Only Documents and images are allowed</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" data-dismiss='modal'>Close</button>
+      </div>
+          </div>
+
+  </div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-title">
+        <h4>Are you sure you want to proceed?</h4>
+      </div>
+      <div class="modal-body">
+              <p>This step cant be reversed Do you want to continue ?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss='modal'>Close</button>
+        <button class="btn btn-success">Proceed</button>
+      </div>
+          </div>
+
+  </div>
+</div>
+       </div>
+
+   </div>
+
+
+
+  
+</main>
+  
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
+    authDomain: "teachifyppc.firebaseapp.com",
+    databaseURL: "https://teachifyppc.firebaseio.com",
+    projectId: "teachifyppc",
+    storageBucket: "teachifyppc.appspot.com",
+    messagingSenderId: "702587918647"
+  };
+  firebase.initializeApp(config);
+</script>
+<script src="js/slideout.min.js"></script>
+<script src="js/uploads.js"></script>
+</body>
+</html>

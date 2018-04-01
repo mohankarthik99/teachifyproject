@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Dashboard</title>
+		<link rel="stylesheet" href="css/hamburgers.min.css">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+<nav id="menu" class="slideout-menu">
+  <header>
+  <h3 class="fontbold text-center">Dashboard</h3>
+  <div class="flexit">
+  	  <button class="btn btn-info fontsemibold" id="username">Please wait..</button>
+
+  </div>
+  <br>
+  <br>
+    <ul class="navown">
+    <li id="active-li"><a href="home.html">Home</a></li>
+    <hr>
+    <li><a href="">Upload history</a></li>
+    <hr>
+    <li><a href="uploads.html">New Upload</a></li>
+    <hr>
+    <li><a href="">User Profile</a></li>
+        <li id="logout"><a href="">Logout</a></li>
+
+  </ul>
+  
+  </header>
+</nav>
+
+  <header class="head">
+<button style="color:white" class="hamburger hamburger--arrowalt" id="cool" type="button">
+  <span class="hamburger-box">
+    <span style="background: white" class="hamburger-inner"></span>
+  </span>
+</button>
+      </header>
+
+
+
+
+	
+<main id="panel" class="slideout-panel">
+		<div class="container-fluid">
+		<div class="row">
+           <div class="col-sm-12"> <!-- our content area -->
+       <div class="row">
+       	<div class="col-md-4">
+       		<select name="Year" id="year" class="extend">
+       			<option value="firstyear">FIRSTYEAR</option>
+       			<option value="secondyear">SECONDYEAR</option>
+       		</select>
+       	</div>
+       	<div class="col-md-4">
+       			<select name="Department" id="dpt" class="extend">
+       			<option value="cse">CSE</option>
+       			<option value="mech">MECH</option>
+       		</select>
+       	</div>
+       	<div class="col-md-4">
+       		<button class="btn btn-primary extend" id="checkdetails">Check Details</button>
+       	</div>
+       </div><!--select dropdown row end-->
+
+<div class="mainpart"> <!-- HTML generation Parent
+	 -->
+</div>
+     
+
+
+             
+         </div><!--CONTENT WINDOW-->
+         	
+         </div><!--COntainer fluid-->
+       
+	
+	</div><!--container end-->
+		<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.0.1/dist/loadingoverlay.min.js"></script>
+
+	<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
+<script>
+	  var config = {
+    apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
+    authDomain: "teachifyppc.firebaseapp.com",
+    databaseURL: "https://teachifyppc.firebaseio.com",
+    projectId: "teachifyppc",
+    storageBucket: "teachifyppc.appspot.com",
+    messagingSenderId: "702587918647"
+  };
+  firebase.initializeApp(config);
+
+</script>
+<script src="js/slideout.min.js"></script>
+
+<script type="text/javascript" src="js/homepage.js"></script>
+
+</body>
+</html>
