@@ -1,5 +1,32 @@
   (function(){
     //NAVBAR//
+const auth=firebase.auth();
+var signout=false;
+
+auth.onAuthStateChanged((authdata)=>{
+  if(authdata){
+    return true;
+  }
+  else{
+if(!(signout)){
+    alert("Please Login first");
+    window.location.href="index.html"
+  }
+  }
+});
+
+logout.addEventListener("click",function(){ //Logout button
+firebase.auth().signOut().then(function(){
+        signout=true;
+    alert("You have been signed out");
+    window.open("index.html","_self");
+  }).catch(function(error){
+       console.log(error.message);
+  });
+});
+
+    var staffname=location.search.substring(location.search.indexOf("=")+1,location.search.lastIndexOf("&"));
+    $('#username').html(staffname);
    var slideout = new Slideout({
     'panel': document.getElementById('panel'),
     'menu': document.getElementById('menu'),
@@ -172,13 +199,12 @@ event.preventDefault();
   var subvalue=subselect.value;
   var descvalue=desctxt.value;
   var titlevalue=titletxt.value;
-  var fileType=uploader.value.substring(uploader.value.lastIndexOf(".")+1,uploader.value.length);
+  var fileType=uploader.value.substring(uploader.value.lastIndexOf(".")+1,uploader.value.length).toLowerCase();
   var fileDetails=[uploader.files[0],fileType,uploader.files[0].size,uploader.files[0].name];
   var validation=validate(fileDetails,yearvalue,deptvalue,subvalue,titlevalue,descvalue);
 
 if(validation){
-  console.log(validation);
-  console.log("Time to push data");
+firebaseUpload(fileDetails[0],validation,yearvalue,deptvalue,fileDetails,titlevalue,descvalue,subvalue);
 }
 else{
 $('#myModal').modal('show');
@@ -210,12 +236,14 @@ if((year!="Select the Year")&&(dept!="Select the Department")&&(sub!="Please sel
     }
   });
 
-if(docfind.length){
+if(docfind.length &&(metaData.size<8388608)){
   metaData.contentType="Docs";
+  metaData.teacherName=staffname;
   return metaData;
 }
-else if(imagefind.length){
+else if(imagefind.length  &&(metaData.size<8388608)){
   metaData.contentType="images";
+  metaData.teacherName=staffname;
   return metaData;
 }
 else{
@@ -229,7 +257,84 @@ else{
 
 }//validate function end
 
+function firebaseUpload(file,metaData,year,dept,fileDetails,titlevalue,descvalue,subvalue){
+var dbRef=firebase.storage().ref();
+var downloadurl="";
+
+if(year=="firstyear"){
+ var firstyearupload=  dbRef.child("uploads/"+year+"/"+file.name).put(file,metaData);
+
+firstyearupload.on('state_changed',function(snapshot){
+
+$('progress').val(snapshot.bytesTransferred/snapshot.totalBytes*100);
+
+},function(error){
+alert(error.message);
+},function(success){
+  downloadurl=firstyearupload.snapshot.downloadURL;
+  const dbRef=firestore.collection("Teacheruploads");
+console.log("enetered");
+dbRef.add({
+  metaData:{
+  fileType:fileDetails[1],
+  size:fileDetails[2],
+  subject:subvalue,
+  uploadTimeStamp:firebase.firestore.FieldValue.serverTimestamp(),
+  year:year
+  },
+  uploadInfo:{
+   comments:descvalue,
+   filePath:downloadurl,
+   title:titlevalue,
+   uid:firebase.auth().currentUser.uid,
+   teacherName:staffname
+  }
+}).then(()=>{
+  alert("Successfully Uploaded");
+}).catch((error)=>{
+  alert("something"+error.message);
+});
+});//realtimelistener
 }
+else{
+var uploadyears=  dbRef.child("uploads/"+year+"/"+"/"+dept+"/"+file.name).put(file,metaData);
+uploadyears.on('state_changed',function(snapshot){
+
+$('progress').val(snapshot.bytesTransferred/snapshot.totalBytes*100);
+
+},function(error){
+alert(error.message);
+},function(success){
+  downloadurl=uploadyears.snapshot.downloadURL;
+
+const dbRef=firestore.collection("Teacheruploads");
+console.log("enetered");
+dbRef.add({
+  metaData:{
+  fileType:fileDetails[1],
+  size:fileDetails[2],
+  subject:subvalue,
+  uploadTimeStamp:firebase.firestore.FieldValue.serverTimestamp(),
+  year:year
+  },
+  uploadInfo:{
+   comments:descvalue,
+   filePath:downloadurl,
+   title:titlevalue,
+   uid:firebase.auth().currentUser.uid,
+   teacherName:staffname
+  }
+}).then(()=>{
+  alert("Successfully Uploaded");
+}).catch((error)=>{
+  alert("something"+error.message);
+});
+});//realtimelistener
+}
+
+}//firebase function end
+
+}//upload function end
    
 
 /*-----------------------------------------------------All event Listeners-------------------------------------------------------------------*/

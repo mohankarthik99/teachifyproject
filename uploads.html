@@ -14,6 +14,10 @@
   <header>
   <h3 class="fontbold text-center">Dashboard</h3>
   <br>
+    <div class="flexit">
+      <button class="btn btn-info fontsemibold" id="username">Please wait..</button>
+
+  </div>
   <br>
   <ul class="navown">
     <li><a href="home.html">Home</a></li>
@@ -47,7 +51,7 @@
 <div class="row">
    <div class="col-md-4 pushdown col-sm-12">
     <h4>Year :</h4>
-  <select id="uploadYear" class="extend" style="padding: 10px 5px;">
+  <select id="uploadYear" class="extend" style="padding: 10px 5px;" autocomplete="off">
     <option selected="selected" class="hidden">Select the Year</option> 
       <option value="firstyear">I year</option>
     <option value="secondyear">II year</option>
@@ -59,7 +63,7 @@
 
   <div class="col-md-4 pushdown col-sm-6">
         <h4>Department :</h4>
-    <select id="uploadDept" class="extend" style="padding: 10px 5px;"  required="true">  
+    <select id="uploadDept" class="extend" style="padding: 10px 5px;"  required="true" autocomplete="off">  
      <!-- Selecting the department -->
     <option selected="selected" class="hidden">Select the Department</option> 
 <option value="cse">Computer science</option>
@@ -72,7 +76,7 @@
   </div>
   <div class="col-md-4 pushdown col-sm-6">
         <h4>Subject</h4>
-    <select id="uploadSub" class="extend" style="padding: 10px 5px;" required="true">
+    <select id="uploadSub" class="extend" style="padding: 10px 5px;" required="true" autocomplete="off">
       <option>Please select the Department first</option>
     </select>
   </div>
