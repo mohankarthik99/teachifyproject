@@ -100,7 +100,7 @@ main{
 	}
   .fontsemibold{
     font-family: "Poppins-SemiBold";
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: white;
   }
 
@@ -183,4 +183,21 @@ padding: 10px 0px;
 .modal-backdrop {
     /* bug fix - no overlay */    
     display: none;    
+}
+.black{
+  color: black;
+  font-size: 1.6rem;
+}
+
+.modal {
+  position: fixed;
+  top:50%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
 }
