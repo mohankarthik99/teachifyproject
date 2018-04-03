@@ -201,3 +201,7 @@ padding: 10px 0px;
   -webkit-overflow-scrolling: touch;
   outline: 0;
 }
+.cardimg{
+  width: 180px;
+  height: 180px;
+}

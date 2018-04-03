@@ -5,7 +5,9 @@ var signout=false;
 
 auth.onAuthStateChanged((authdata)=>{
   if(authdata){
-    return true;
+   if(!(location.search)){
+        window.open("home.html","_self")
+   }
   }
   else{
 if(!(signout)){
@@ -25,56 +27,26 @@ firebase.auth().signOut().then(function(){
   });
 });
 
+
     var staffname=location.search.substring(location.search.indexOf("=")+1,location.search.lastIndexOf("&"));
     $('#username').html(staffname);
-   var slideout = new Slideout({
-    'panel': document.getElementById('panel'),
-    'menu': document.getElementById('menu'),
-    'padding': 225,
-    'tolerance': 70
-  });
-   document.querySelector('#cool').addEventListener('click', function() {
-    this.classList.toggle("is-active");
-    slideout.toggle();
-  });
-
- 
-
-var fixed = document.querySelector('.head');
-
-slideout.on('translate', function(translated) {
-  fixed.style.transform = 'translateX(' + translated + 'px)';
-});
-
-slideout.on('beforeopen', function () {
-  fixed.style.transition = 'transform 300ms ease';
-  fixed.style.transform = 'translateX(225px)';
-});
-
-slideout.on('beforeclose', function () {
-  fixed.style.transition = 'transform 300ms ease';
-  fixed.style.transform = 'translateX(0px)';
-});
-
-slideout.on('open', function () {
-  fixed.style.transition = '';
-});
-
-slideout.on('close', function () {
-  fixed.style.transition = '';
-});
+  
 //-------------------------------------------------------------------------------------------------------------//---------------------------//--------------------//
 
 const titlecard=document.querySelector('#titlecard');
+const cardimg=document.querySelector(".cardimg");
 const titletxt=document.querySelector('#titletxt');
 const desccard=document.querySelector('#desccard');
 const desctxt=document.querySelector('#desctxt');
+const radiofile=document.querySelector('#fileok');
+const radiolink=document.querySelector('#linkok');
 var txtbox=document.querySelector(".get");
 const pushcloud=document.querySelector(".form-upload");
 const yearselect=document.querySelector("#uploadYear");
 const deptselect=document.querySelector("#uploadDept");
 const subselect=document.querySelector("#uploadSub");
 const uploader=document.querySelector("#uploader"); //upload file element
+const uploader1=document.querySelector("#uploader1"); //upload file element
 const firestore=firebase.firestore();
 const store=firebase.storage();
 
@@ -154,7 +126,6 @@ var updateSubjects=function(){
 var year=yearselect.value;
 var selectedDepartment=deptselect.selectedIndex-1;
 var subarr;
-console.log(input);
 if(year=="firstyear" && input!="Select the Department"){  //if loop to see first year
   subselect.innerHTML="";
 subjects.first.then((data)=>{
@@ -193,22 +164,77 @@ for(char of subarr[selectedDepartment]){
 var upload=function(event){
 event.preventDefault();
 
-(function getData(){
+(function getData(){//needed data-year,sub,title,comments,filetype,uid the same
   var yearvalue=yearselect.value;
   var deptvalue=deptselect.value;
   var subvalue=subselect.value;
-  var descvalue=desctxt.value;
+  var descvalue=desctxt.value;    //filename,size,type,file basically filedetails array
   var titlevalue=titletxt.value;
-  var fileType=uploader.value.substring(uploader.value.lastIndexOf(".")+1,uploader.value.length).toLowerCase();
-  var fileDetails=[uploader.files[0],fileType,uploader.files[0].size,uploader.files[0].name];
-  var validation=validate(fileDetails,yearvalue,deptvalue,subvalue,titlevalue,descvalue);
+  var urltopost=uploader1.value;
+  var downloadurl="";
+   var fileType;
 
-if(validation){
-firebaseUpload(fileDetails[0],validation,yearvalue,deptvalue,fileDetails,titlevalue,descvalue,subvalue);
+  if(radiofile.checked && uploader.value){
+
+        fileType=uploader.value.substring(uploader.value.lastIndexOf(".")+1,uploader.value.length).toLowerCase();
+    var fileDetails=[uploader.files[0],fileType,uploader.files[0].size,uploader.files[0].name];
+  
+
+    var validation=validate(fileDetails,yearvalue,deptvalue,subvalue,titlevalue,descvalue);
+
+  if(validation){
+  var dbRef=store.ref();
+
+  if(yearvalue=="firstyear"){
+   var firstyearupload=  dbRef.child("uploads/"+yearvalue+"/"+fileDetails[3]).put(fileDetails[0],validation);
+
+  firstyearupload.on('state_changed',function(snapshot){
+  var rate=snapshot.bytesTransferred/snapshot.totalBytes*100;
+  document.querySelector("#progress").style.width=rate+"%";
+  $('#progress').html(rate+"%");
+
+
+
+  },function(error){
+  alert(error.message);
+  },function(success){
+    downloadurl=firstyearupload.snapshot.downloadURL;
+    firebaseUpload(yearvalue,downloadurl,fileType,validation.size,titlevalue,descvalue,subvalue);
+  });//realtimelistener
+  }
+  else{
+  var uploadyears=  dbRef.child("uploads/"+yearvalue+"/"+"/"+deptvalue+"/"+fileDetails[3]).put(fileDetails[0],validation);
+  uploadyears.on('state_changed',function(snapshot){
+
+  var rate=snapshot.bytesTransferred/snapshot.totalBytes*100;
+  document.querySelector("#progress").style.width=rate+"%";
+  $('#progress').html(rate+"%");
+  },function(error){
+  alert(error.message);
+  },function(success){
+    downloadurl=uploadyears.snapshot.downloadURL;
+    firebaseUpload(yearvalue,downloadurl,fileType,validation.size,titlevalue,descvalue,subvalue);
+  });//realtimelistener
+  }
+
+ }
+ else{
+ $('#myModal').modal('show');
+ }
+ }
+else if((radiolink.checked) && (uploader1.value)){
+  document.querySelector("#progress").style.width="30%";
+downloadurl=uploader1.value;
+fileType="link";
+let size="txtbytes";
+    firebaseUpload(yearvalue,downloadurl,fileType,size,titlevalue,descvalue,subvalue);
+
+
 }
 else{
-$('#myModal').modal('show');
+  $('#myModal').modal('show');
 }
+
 
 
 })();
@@ -229,7 +255,6 @@ if((year!="Select the Year")&&(dept!="Select the Department")&&(sub!="Please sel
       return true;
     }
   });
- console.log(docfind);
  var imagefind=formats.images.filter((data)=>{
     if(files[1]==data){
       return true;
@@ -257,62 +282,12 @@ else{
 
 }//validate function end
 
-function firebaseUpload(file,metaData,year,dept,fileDetails,titlevalue,descvalue,subvalue){
-var dbRef=firebase.storage().ref();
-var downloadurl="";
-
-if(year=="firstyear"){
- var firstyearupload=  dbRef.child("uploads/"+year+"/"+file.name).put(file,metaData);
-
-firstyearupload.on('state_changed',function(snapshot){
-
-$('progress').val(snapshot.bytesTransferred/snapshot.totalBytes*100);
-
-},function(error){
-alert(error.message);
-},function(success){
-  downloadurl=firstyearupload.snapshot.downloadURL;
-  const dbRef=firestore.collection("Teacheruploads");
-console.log("enetered");
-dbRef.add({
-  metaData:{
-  fileType:fileDetails[1],
-  size:fileDetails[2],
-  subject:subvalue,
-  uploadTimeStamp:firebase.firestore.FieldValue.serverTimestamp(),
-  year:year
-  },
-  uploadInfo:{
-   comments:descvalue,
-   filePath:downloadurl,
-   title:titlevalue,
-   uid:firebase.auth().currentUser.uid,
-   teacherName:staffname
-  }
-}).then(()=>{
-  alert("Successfully Uploaded");
-}).catch((error)=>{
-  alert("something"+error.message);
-});
-});//realtimelistener
-}
-else{
-var uploadyears=  dbRef.child("uploads/"+year+"/"+"/"+dept+"/"+file.name).put(file,metaData);
-uploadyears.on('state_changed',function(snapshot){
-
-$('progress').val(snapshot.bytesTransferred/snapshot.totalBytes*100);
-
-},function(error){
-alert(error.message);
-},function(success){
-  downloadurl=uploadyears.snapshot.downloadURL;
-
+function firebaseUpload(year,downloadurl,filetype,filesize,titlevalue,descvalue,subvalue){ //push to firestore
 const dbRef=firestore.collection("Teacheruploads");
-console.log("enetered");
 dbRef.add({
   metaData:{
-  fileType:fileDetails[1],
-  size:fileDetails[2],
+  fileType:filetype,
+  size:filesize,
   subject:subvalue,
   uploadTimeStamp:firebase.firestore.FieldValue.serverTimestamp(),
   year:year
@@ -329,17 +304,44 @@ dbRef.add({
 }).catch((error)=>{
   alert("something"+error.message);
 });
-});//realtimelistener
-}
+    document.querySelector("#progress").style.width="100%";
+        document.querySelector("#progress").innerHTML="100%";
+
 
 }//firebase function end
 
 }//upload function end
-   
 
+/*youtube thumbnail generation function
+*/var youtubethumb=function(){
+  if(uploader1.value.indexOf("youtube.com")>=0){
+  let imgid=uploader1.value.substring(uploader1.value.indexOf("=")+1, uploader1.value.length);
+  return "https://img.youtube.com/vi/"+imgid+"/0.jpg"
+}
+else{
+  return "images/image-file.png";
+}
+}
 /*-----------------------------------------------------All event Listeners-------------------------------------------------------------------*/
 pushcloud.addEventListener("submit",function(event){
   upload(event);
+});
+
+radiofile.addEventListener("mousedown",function(){
+if(!(radiofile.checked)){
+cardimg.src="images/image-file.png";
+}
+});
+radiolink.addEventListener("mousedown",function(){
+cardimg.src=youtubethumb();
+})
+
+
+uploader1.addEventListener("blur",function(){
+  var data=youtubethumb();
+  if(cardimg.src!=data){
+cardimg.src=data;
+  }
 });
 
 deptselect.addEventListener("change",updateSubjects);

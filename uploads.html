@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Uploads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 
   <link rel="stylesheet" href="css/hamburgers.min.css">
@@ -51,7 +52,7 @@
 <div class="row">
    <div class="col-md-4 pushdown col-sm-12">
     <h4>Year :</h4>
-  <select id="uploadYear" class="extend" style="padding: 10px 5px;" autocomplete="off">
+  <select id="uploadYear" class="form-control extend"  autocomplete="off">
     <option selected="selected" class="hidden">Select the Year</option> 
       <option value="firstyear">I year</option>
     <option value="secondyear">II year</option>
@@ -63,7 +64,7 @@
 
   <div class="col-md-4 pushdown col-sm-6">
         <h4>Department :</h4>
-    <select id="uploadDept" class="extend" style="padding: 10px 5px;"  required="true" autocomplete="off">  
+    <select id="uploadDept" class="form-control extend"   required="true" autocomplete="off">  
      <!-- Selecting the department -->
     <option selected="selected" class="hidden">Select the Department</option> 
 <option value="cse">Computer science</option>
@@ -76,7 +77,7 @@
   </div>
   <div class="col-md-4 pushdown col-sm-6">
         <h4>Subject</h4>
-    <select id="uploadSub" class="extend" style="padding: 10px 5px;" required="true" autocomplete="off">
+    <select id="uploadSub" class="form-control extend"  required="true" autocomplete="off">
       <option>Please select the Department first</option>
     </select>
   </div>
@@ -88,7 +89,7 @@
   <div class="col-md-4">
     <div class='card'>
       <h3 style="color: #000" class="fontbold" id="titlecard">Title</h3>
-<img src="images/image-file.png"  style="width:90px;height: 90px"    alt="">
+<img class="cardimg" src="images/image-file.png"     alt="">
 
 <h3 class="fontsemibold" style="color: #000;padding:5px 0px">Description</h3>
 
@@ -104,8 +105,26 @@
   </div>
 
   <div class="form-group">
-    <label for="exampleInputUpload">Upload File</label>
-      <input type="file"  class="form-control resetpadding"  id="uploader" required="true">
+    <label for="exampleInputUpload">Upload File or Link?</label>
+    <div class="row">
+      <div class="col-md-6">
+    <div class="input-group">
+       <span class="input-group-addon">
+  <input type="radio" name="inlineRadioOptions" id="fileok" value="option1"> </span>
+    <input type="file"  class="form-control resetpadding"  id="uploader">
+</div>
+      </div>
+      <div class="col-md-6">
+            <div class="input-group">
+          <span class="input-group-addon">
+  <input type="radio" name="inlineRadioOptions" id="linkok" value="option2"> 
+      </span>
+         <input type="text"  placeholder="Paste the Link or Url" class="form-control resetpadding"  id="uploader1">
+       </div>
+      </div>
+    </div>
+     
+
         <p  class="fontsemibold" style="color: red;font-style: bold;text-transform: uppercase;">* Please note that your files should be lesser than 8mb</p>
 
   </div>
@@ -118,8 +137,11 @@
   <button class="btn btn-info extend fontsemibold text-center" id="pushcloud">Upload everything</button>
   <br>
   <br>
-            <progress class="extend" value="0"></progress>
-
+<div class="progress">
+  <div class="progress-bar" id="progress" role="progressbar"  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+    0%
+  </div>
+</div>
 </form>
 
   </div> <!-- Form for the user
@@ -175,6 +197,44 @@
   firebase.initializeApp(config);
 </script>
 <script src="js/slideout.min.js"></script>
+<script>
+   var slideout = new Slideout({
+    'panel': document.getElementById('panel'),
+    'menu': document.getElementById('menu'),
+    'padding': 225,
+    'tolerance': 70
+  });
+   document.querySelector('#cool').addEventListener('click', function() {
+    this.classList.toggle("is-active");
+    slideout.toggle();
+  });
+
+ 
+
+var fixed = document.querySelector('.head');
+
+slideout.on('translate', function(translated) {
+  fixed.style.transform = 'translateX(' + translated + 'px)';
+});
+
+slideout.on('beforeopen', function () {
+  fixed.style.transition = 'transform 300ms ease';
+  fixed.style.transform = 'translateX(225px)';
+});
+
+slideout.on('beforeclose', function () {
+  fixed.style.transition = 'transform 300ms ease';
+  fixed.style.transform = 'translateX(0px)';
+});
+
+slideout.on('open', function () {
+  fixed.style.transition = '';
+});
+
+slideout.on('close', function () {
+  fixed.style.transition = '';
+});
+</script>
 <script src="js/uploads.js"></script>
 </body>
 </html>
