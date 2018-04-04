@@ -8,6 +8,7 @@
 
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 <link rel="stylesheet" href="css/theme.css">
+
 </head>
 <body>
 
@@ -47,20 +48,24 @@
 
 
 	
-<main id="panel" class="slideout-panel">
+<main id="panel" class="slideout-panel">  
 		<div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12"><h2 class="fontsemibold text-center shade">Main Directory</h2>
+</div>
+      </div>
 		<div class="row">
            <div class="col-sm-12"> <!-- our content area -->
        <div class="row">
        	<div class="col-md-4">
-       		<select name="Year" id="year" class="extend">
+       		<select name="Year" id="year" class="extend form-control">
        			<option value="firstyear">FIRSTYEAR</option>
             <option value="secondyear">SECONDYEAR</option>
        			<option value="thirdyear">THIRDYEAR</option>
        		</select>
        	</div>
        	<div class="col-md-4">
-       			<select name="Department" id="dpt" class="extend">
+       			<select name="Department" id="dpt" class="extend form-control">
        			<option value="cse">CSE</option>
             <option value="mech">MECH</option>
             <option value="ece">ECE</option>
@@ -74,6 +79,8 @@
 
 <div class="mainpart"> <!-- HTML generation Parent
 	 -->
+
+   
 </div>
      
 
@@ -104,7 +111,7 @@
 
 </script>
 <script src="js/slideout.min.js"></script>
-
+<script src="js/fontawesome-all.min.js"></script>
 <script type="text/javascript" src="js/homepage.js"></script>
 
 </body>

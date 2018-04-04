@@ -47,6 +47,7 @@ const deptselect=document.querySelector("#uploadDept");
 const subselect=document.querySelector("#uploadSub");
 const uploader=document.querySelector("#uploader"); //upload file element
 const uploader1=document.querySelector("#uploader1"); //upload file element
+const cardflip=document.querySelector(".card");
 const firestore=firebase.firestore();
 const store=firebase.storage();
 
@@ -163,7 +164,9 @@ for(char of subarr[selectedDepartment]){
 
 var upload=function(event){
 event.preventDefault();
-
+  $("#finished").html("On progress...");
+  document.querySelector("#progress").style.width="0%";
+  $('#progress').html("0%");
 (function getData(){//needed data-year,sub,title,comments,filetype,uid the same
   var yearvalue=yearselect.value;
   var deptvalue=deptselect.value;
@@ -189,10 +192,12 @@ event.preventDefault();
    var firstyearupload=  dbRef.child("uploads/"+yearvalue+"/"+fileDetails[3]).put(fileDetails[0],validation);
 
   firstyearupload.on('state_changed',function(snapshot){
-  var rate=snapshot.bytesTransferred/snapshot.totalBytes*100;
+  var rate=Math.floor((snapshot.bytesTransferred/snapshot.totalBytes*100));
+  console.log(rate);
+  if(rate<=90){
   document.querySelector("#progress").style.width=rate+"%";
   $('#progress').html(rate+"%");
-
+ }
 
 
   },function(error){
@@ -222,7 +227,7 @@ event.preventDefault();
  $('#myModal').modal('show');
  }
  }
-else if((radiolink.checked) && (uploader1.value)){
+else if((radiolink.checked) && (uploader1.value) && (yearvalue!="Select the Year")&&(deptvalue!="Select the Department")&&(subvalue!="Please select the Department first")){
   document.querySelector("#progress").style.width="30%";
 downloadurl=uploader1.value;
 fileType="link";
@@ -232,6 +237,8 @@ let size="txtbytes";
 
 }
 else{
+       $("#finished").html("Please fill out all the fields");
+
   $('#myModal').modal('show');
 }
 
@@ -300,12 +307,14 @@ dbRef.add({
    teacherName:staffname
   }
 }).then(()=>{
-  alert("Successfully Uploaded");
+  document.querySelector("#progress").style.width="100%";
+  $('#progress').html("100%");
+  cardflip.classList.add("cardflip");
+  $("#finished").html("Successfully Uploaded");
 }).catch((error)=>{
   alert("something"+error.message);
 });
-    document.querySelector("#progress").style.width="100%";
-        document.querySelector("#progress").innerHTML="100%";
+
 
 
 }//firebase function end

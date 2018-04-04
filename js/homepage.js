@@ -1,3 +1,4 @@
+var cool=[];
 (function(){
 
   var slideout = new Slideout({             ///slideout menu
@@ -176,9 +177,53 @@ alert(error.message);
 
 }
 
+var retrieveDocs=function(subs){
+	console.log(subs);
+const dbRef=firestore.collection("Teacheruploads");
+const year=document.querySelector("#year");
+var search;
+var finalData=new Promise((resolve,reject)=>{
+	var uploads={}
+	for(let i=0;i<subs.length;i++){
+	search=subs[i];
+	      uploads[search]=[];
+	      console.log("hey");
+     dbRef.where("subject","==",search).orderBy("uploadTimeStamp","desc").get().then((snapshot)=>{
+     	cool.push(snapshot);
+		snapshot.forEach((doc)=>{
+			if(doc.exists){
+				var docs=doc.data();
+			console.log(docs.year+" "+year.value);
+			if(docs.year==year.value)
+			{
+			uploads.search.push(doc.data());
+		}
+			}
+			else{
+				console.log("document doesnt exist for"+search);
+			}
+			
+		});
+	}).catch((error)=>{
+    console.log(error.message);
+	})
+}
+		console.log(uploads);
+
+resolve(uploads);
+}).then((data)=>{
+	console.log(data);
+});
+
+
+}
+
 async function represent(year,dpt){
-	var $template=$("<div class='shade'><h3 style='color: white;'>Conputer hardware and servicing</h3></div><div class='row'><div class='container-fluid'><div class='col-md-4'><div class='card'><h3>Softcopy-1</h3><div class='placeholder'></div><p>Lorem ipsum dolquibusdam magni, cumque, aspernatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div><div class='col-md-4'><div class='card'><h3>Softcopy-2</h3><div class='placeholder'></div><p>Lorem ipsum dolor sit amet, consectetur adipinatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div><div class='col-md-4'><div class='card'><h3>Softcopy-2</h3><div class='placeholder'></div><p>Lorem ipsum dolor sit amet, consectetur aspernatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div> card end</div></div></div>");
+	var $template=$("<div class='shade'><h3 style='color: white;'></h3><div class='row'><div class='container-fluid'><div class='col-md-4'><div class='card'><h3>Softcopy-1</h3><div class='placeholder'></div><p>Lorem ipsum dolquibusdam magni, cumque, aspernatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div><div class='col-md-4'><div class='card'><h3>Softcopy-2</h3><div class='placeholder'></div><p>Lorem ipsum dolor sit amet, consectetur adipinatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div><div class='col-md-4'><div class='card'><h3>Softcopy-2</h3><div class='placeholder'></div><p>Lorem ipsum dolor sit amet, consectetur aspernatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div></div></div>");
 	var subjects=await getData(year,dpt);
+retrieveDocs(subjects);
+	    var $templatecard=$("<div class='card'> <h3 style='color: #000' class='fontbold' id='titlecard'>Title</h3><img class='cardimg' src='images/image-file.png'><h3 class='fontsemibold' style='color: #000;padding:5px 0px'>Description</h3> <p class='text-center black fontsemibold' id='desccard'>Let students know what this is about here.......</p><p style='text-align: left; padding-left: 10px;' class='black fontsemibold' >Uploaded By <span class='text-center'>Ross geller</span> </p><p style='text-align: left; padding-left: 10px;' class='black fontsemibold' >Upload date <span></span></p></div>")
+
 if (subjects) {
 	for(i=0;i<subjects.length;i++){
 	$(".mainpart").append($template.clone());
