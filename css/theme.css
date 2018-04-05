@@ -139,8 +139,9 @@ hr{
     }
 .cardparent{
   position: relative;
-width: 320px;
-  height: 480px;
+width: 100%;
+height: 430px;
+overflow-wrap:break-word;
     perspective: 800px;
 }
      .cardflip{
@@ -174,6 +175,12 @@ width: 320px;
     height: 100%;
       backface-visibility: hidden;
       transform:rotateY(0deg);
+      overflow: hidden;
+    }
+    .card-front p{
+      padding-bottom:15px;
+      padding-left: 10px;
+      padding-right: 10px;
     }
  .card-back{
       position: absolute;
@@ -181,6 +188,7 @@ width: 320px;
       left: 0;
     width: 100%;
     height: 100%;
+
       backface-visibility: hidden;
       transform: rotateY(180deg);
     }
@@ -245,4 +253,10 @@ padding: 10px 0px;
 .cardimg{
   width: 180px;
   height: 180px;
+}
+@media(max-width: 768px)
+{
+label{
+  padding-top: 13px;
+}
 }

@@ -51,7 +51,7 @@
                         <h2 class="fontsemibold text-center shade">Create a New Upload</h2>
 <div class="row">
    <div class="col-md-4 pushdown col-sm-12">
-    <h4>Year :</h4>
+    <h4 class="fontsemibold black">Year :</h4>
   <select id="uploadYear" class="form-control extend"  autocomplete="off">
     <option selected="selected" class="hidden">Select the Year</option> 
       <option value="firstyear">I year</option>
@@ -63,7 +63,7 @@
   </div>
 
   <div class="col-md-4 pushdown col-sm-6">
-        <h4>Department :</h4>
+        <h4 class="fontsemibold black">Department :</h4>
     <select id="uploadDept" class="form-control extend"   required="true" autocomplete="off">  
      <!-- Selecting the department -->
     <option selected="selected" class="hidden">Select the Department</option> 
@@ -76,9 +76,9 @@
 
   </div>
   <div class="col-md-4 pushdown col-sm-6">
-        <h4>Subject</h4>
+        <h4 class="fontsemibold black">Subject</h4>
     <select id="uploadSub" class="form-control extend"  required="true" autocomplete="off">
-      <option>Please select the Department first</option>
+      <option selected="true" class="hidden">Please select the Department first</option>
     </select>
   </div>
 
@@ -93,13 +93,13 @@
       <h3 style='color: #000' class='fontbold' id='titlecard'>Title</h3>
 <img class='cardimg' src='images/image-file.png'>
 
-<h3 class='fontsemibold' style='color: #000;padding:5px 0px'>Description</h3>
+<h3 class='fontsemibold' style='color: #000;padding:5px 0px;'>Description</h3>
     
-      <p class='text-center black fontsemibold'  id='desccard'>Let students know what this is about here.......</p>
+      <p class='text-center black fontsemibold' style="font-size: 1.4rem;"  id='desccard'>Let students know what this is about here.......</p>
 </div>
 
   <div class="card-back">
-    <div class="wrapper" style="background: lightgreen; padding: 20px 12px">
+    <div class="wrapper" style="padding: 30px 12px;      background: #5a8de9;">
       <i class="fas fa-check-circle text-center fa-5x" style="color: white"></i>  
     </div>
     <h3 class="fontbold black">Successfully Uploaded</h3>
@@ -126,7 +126,7 @@
     <div class="input-group">
        <span class="input-group-addon">
   <input type="radio" name="inlineRadioOptions" id="fileok" value="option1"> </span>
-    <input type="file"  class="form-control resetpadding"  id="uploader">
+    <input type="file"  class="form-control resetpadding" checked   id="uploader">
 </div>
       </div>
       <div class="col-md-6">
@@ -140,13 +140,13 @@
     </div>
      
 
-        <p  class="fontsemibold" style="color: red;font-style: bold;text-transform: uppercase;">* Please note that your files should be lesser than 8mb</p>
+        <p  class="fontsemibold" style="color: red;font-style: bold;text-transform: uppercase;font-size: 1.4rem">* Please note that your files should be lesser than 8mb</p>
 
   </div>
 
   <div class="form-group">
-    <label for="exampleInputComments">Description</label>
-    <input type="text" class="form-control resetpadding" id="desctxt" placeholder="Description" required="true">
+    <label for="exampleInputComments">Description (125 Characters)</label>
+    <input type="text" class="form-control resetpadding" maxLength="125" id="desctxt" placeholder="Description" required="true">
   </div>
 
   <button class="btn btn-info extend fontsemibold text-center" id="pushcloud">Upload everything</button>
@@ -158,8 +158,7 @@
   </div>
 </div>
 </form>
-<p id="finished" class="fontbold text-center black"></p>
-  </div> <!-- Form for the user
+<button class="btn btn-danger fontsemibold" style="width: 100%;" id="reset">Reset all</button>  </div> <!-- Form for the user
   </div> -->
         </div>
         <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">

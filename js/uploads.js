@@ -164,9 +164,9 @@ for(char of subarr[selectedDepartment]){
 
 var upload=function(event){
 event.preventDefault();
-  $("#finished").html("On progress...");
   document.querySelector("#progress").style.width="0%";
-  $('#progress').html("0%");
+  $('#progress').html('0%');
+
 (function getData(){//needed data-year,sub,title,comments,filetype,uid the same
   var yearvalue=yearselect.value;
   var deptvalue=deptselect.value;
@@ -228,7 +228,6 @@ event.preventDefault();
  }
  }
 else if((radiolink.checked) && (uploader1.value) && (yearvalue!="Select the Year")&&(deptvalue!="Select the Department")&&(subvalue!="Please select the Department first")){
-  document.querySelector("#progress").style.width="30%";
 downloadurl=uploader1.value;
 fileType="link";
 let size="txtbytes";
@@ -310,7 +309,6 @@ dbRef.add({
   document.querySelector("#progress").style.width="100%";
   $('#progress').html("100%");
   cardflip.classList.add("cardflip");
-  $("#finished").html("Successfully Uploaded");
 }).catch((error)=>{
   alert("something"+error.message);
 });
@@ -352,6 +350,19 @@ uploader1.addEventListener("blur",function(){
 cardimg.src=data;
   }
 });
+document.querySelector("#reset").addEventListener("click",function(){
+  yearselect.value="Select the Year";
+  deptselect.value="Select the Department";
+  subselect.value="Please select the Department first";
+  subselect.innerHTML="<option selected='true' class='hidden'>Please select the Department first</option>";
+  titletxt.value="";
+  desctxt.value="";
+  uploader1.value="";
+  uploader.value="";
+  cardflip.classList.remove("cardflip");
+  titlecard.innerHTML="TITLE";
+  desccard.innerHTML="Let students know what this is about";
+})
 
 deptselect.addEventListener("change",updateSubjects);
 
