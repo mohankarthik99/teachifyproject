@@ -203,31 +203,53 @@ uploads[search]=dbRef.where("metaData.subject","==",search).orderBy("metaData.up
     console.log(error.message);
 	});
 }
-Object.keys(uploads).forEach((data)=>{
-	uploads[data].then((doc)=>{
-		console.log(data);
-		console.log(doc);
-	})
 
-})
 return uploads;
 }
 
 async function represent(year,dpt){
 	var $barelement;
-var $template=$("<div class='card'> <h3 style='color: #000' class='fontbold' id='titlecard'>Title</h3> <div class='flexit'> <img class='cardimguser' src='images/image-file.png'> </div><h3 class='fontsemibold' style='color: #000;padding:5px 0px;'>Description</h3> <p class='text-center black fontsemibold' style='font-size: 1.4rem;padding: 10px' id='desccard'>Let students know what this is about here.......</p><button class='btn btn-info extend fontsemibold'>Download</button> </div>");
+var $template;
 var subjects=await getData(year,dpt);
 var uploads=retrieveDocs(subjects);
-
+console.log(uploads);
+var flexita="";
 if (subjects) {
-	for(i=0;i<subjects.length;i++){
+	for(let i=0;i<subjects.length;i++){
   $barelement=$(" <div class='row'> <div class='col-md-12'><h2 class='fontsemibold text-center shade'>"+subjects[i]+"</h2> </div></div><div class='flexita'></div>")
 	$(".mainpart").append($barelement.clone());
+flexita=document.querySelectorAll(".flexita");
 
+uploads[subjects[i]].then((data)=>{
+var dataArr=[];
+if(data.length>0){
+data.forEach((data)=>{
+Object.keys(data).forEach((doc)=>{
+if(doc=="uploadInfo"){
+dataArr.push([data[doc]["title"],data[doc]["comments"],data[doc]["filePath"],data[doc]["teacherName"]]);
+}
+});
+});
+for(let j=0;j<dataArr.length;j++){
+$template=$("<div class='card'> <h3 style='color: #000' class='fontbold' id='titlecard'>"+dataArr[j][0]+"</h3> <div class='flexit'> <img class='cardimguser' src='images/image-file.png'> </div><h3 class='fontsemibold' style='color: #000;padding:5px 0px;'>Description</h3> <p class='text-center black fontsemibold' style='font-size: 1.4rem;padding: 10px' id='desccard'>"+dataArr[j][1]+"</p><a href="+dataArr[j][2]+" target='_blank'><button class='btn btn-info extend fontsemibold'>Download</button></a> <h4 class='fontsemibold black text-center'>Uploaded By"+dataArr[j][3]+"</h4></div>");
+$(flexita[i]).append($template);
+}
 
+}
+else{
+	flexita[i].style.display="block";
+	$(flexita[i]).html("<div class='row'><div class=\"col-md-12\"><p class=\"fontsemibold text-center black\">No documents are present for now!</p></div></div>");
+
+/*"<div class=\"row\"><div class=\"col-md-12\"><p class=\"fontsemibold black\">No documents is present for now!</p></div></div>"
+*/}
+
+});
 	}
 	 $.LoadingOverlay("hide");
 }
+/*var $template;=$("<div class='card'> <h3 style='color: #000' class='fontbold' id='titlecard'>Title</h3> <div class='flexit'> <img class='cardimguser' src='images/image-file.png'> </div><h3 class='fontsemibold' style='color: #000;padding:5px 0px;'>Description</h3> <p class='text-center black fontsemibold' style='font-size: 1.4rem;padding: 10px' id='desccard'>Let students know what this is about here.......</p><a href=''><button class='btn btn-info extend fontsemibold'>Download</button></a> <h4 class='fontsemibold black text-center'>Uploaded by Rajamani</h4>
+ </div>");
+*/
 	else{
 	 throw 'Something went wrong';
 	return (alert("Something went wrong Please retry"));
