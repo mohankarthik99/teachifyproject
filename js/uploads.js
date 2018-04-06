@@ -47,7 +47,7 @@ const deptselect=document.querySelector("#uploadDept");
 const subselect=document.querySelector("#uploadSub");
 const uploader=document.querySelector("#uploader"); //upload file element
 const uploader1=document.querySelector("#uploader1"); //upload file element
-const cardflip=document.querySelector(".card");
+const cardflip=document.querySelector(".cardupload");
 const firestore=firebase.firestore();
 const store=firebase.storage();
 

@@ -1,4 +1,5 @@
 var cool=[];
+var raj=[];
 (function(){
 
   var slideout = new Slideout({             ///slideout menu
@@ -12,7 +13,7 @@ var cool=[];
     slideout.toggle();
   });
 
- 
+
 
 var fixed = document.querySelector('.head');
 
@@ -79,6 +80,7 @@ nameDecide(auth);
 		final+=replacement[i];
 	}
 	docref.where('UID',"==",auth.currentUser.uid).get().then(function(querySnapshot){
+		console.log(querySnapshot);
    querySnapshot.forEach((doc)=>{
 	if(doc.data().UID==auth.currentUser.uid){
 			checkPost=false;
@@ -116,6 +118,8 @@ nameDecide(auth);
 //Realtime listener for name
 function nameListener(auth){
 	docref.where("UID","==",auth.currentUser.uid).onSnapshot((querySnapshot)=>{
+					raj.push(querySnapshot);
+
 querySnapshot.forEach((doc)=>{
 	if(doc.exists){
 		document.querySelector("#username").innerHTML=(doc.data().name);
@@ -178,59 +182,49 @@ alert(error.message);
 }
 
 var retrieveDocs=function(subs){
-	console.log(subs);
 const dbRef=firestore.collection("Teacheruploads");
 const year=document.querySelector("#year");
-var search;
-var finalData=new Promise((resolve,reject)=>{
-	var uploads={}
+	var uploads={};
 	for(let i=0;i<subs.length;i++){
 	search=subs[i];
-	      uploads[search]=[];
-	      console.log("hey");
-     dbRef.where("subject","==",search).orderBy("uploadTimeStamp","desc").get().then((snapshot)=>{
-     	cool.push(snapshot);
+uploads[search]=dbRef.where("metaData.subject","==",search).orderBy("metaData.uploadTimeStamp","desc").get().then((snapshot)=>{
+	var arrdocs=[];
 		snapshot.forEach((doc)=>{
-			if(doc.exists){
 				var docs=doc.data();
-			console.log(docs.year+" "+year.value);
-			if(docs.year==year.value)
+			if(docs.metaData.year==year.value)
 			{
-			uploads.search.push(doc.data());
+			arrdocs.push(doc.data());
 		}
-			}
-			else{
-				console.log("document doesnt exist for"+search);
-			}
+			
 			
 		});
+		return arrdocs;
 	}).catch((error)=>{
     console.log(error.message);
-	})
+	});
 }
-		console.log(uploads);
+Object.keys(uploads).forEach((data)=>{
+	uploads[data].then((doc)=>{
+		console.log(data);
+		console.log(doc);
+	})
 
-resolve(uploads);
-}).then((data)=>{
-	console.log(data);
-});
-
-
+})
+return uploads;
 }
 
 async function represent(year,dpt){
-	var $template=$("<div class='shade'><h3 style='color: white;'></h3><div class='row'><div class='container-fluid'><div class='col-md-4'><div class='card'><h3>Softcopy-1</h3><div class='placeholder'></div><p>Lorem ipsum dolquibusdam magni, cumque, aspernatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div><div class='col-md-4'><div class='card'><h3>Softcopy-2</h3><div class='placeholder'></div><p>Lorem ipsum dolor sit amet, consectetur adipinatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div><div class='col-md-4'><div class='card'><h3>Softcopy-2</h3><div class='placeholder'></div><p>Lorem ipsum dolor sit amet, consectetur aspernatur at et inventore ipsum, nemo ullam molestias magnam dolorum accusamus odio nihil, repellendus in provident numquam.</p></div></div></div></div>");
-	var subjects=await getData(year,dpt);
-retrieveDocs(subjects);
-	    var $templatecard=$("<div class='card'> <h3 style='color: #000' class='fontbold' id='titlecard'>Title</h3><img class='cardimg' src='images/image-file.png'><h3 class='fontsemibold' style='color: #000;padding:5px 0px'>Description</h3> <p class='text-center black fontsemibold' id='desccard'>Let students know what this is about here.......</p><p style='text-align: left; padding-left: 10px;' class='black fontsemibold' >Uploaded By <span class='text-center'>Ross geller</span> </p><p style='text-align: left; padding-left: 10px;' class='black fontsemibold' >Upload date <span></span></p></div>")
+	var $barelement;
+var $template=$("<div class='card'> <h3 style='color: #000' class='fontbold' id='titlecard'>Title</h3> <div class='flexit'> <img class='cardimguser' src='images/image-file.png'> </div><h3 class='fontsemibold' style='color: #000;padding:5px 0px;'>Description</h3> <p class='text-center black fontsemibold' style='font-size: 1.4rem;padding: 10px' id='desccard'>Let students know what this is about here.......</p><button class='btn btn-info extend fontsemibold'>Download</button> </div>");
+var subjects=await getData(year,dpt);
+var uploads=retrieveDocs(subjects);
 
 if (subjects) {
 	for(i=0;i<subjects.length;i++){
-	$(".mainpart").append($template.clone());
-	}
-	var subtags=document.querySelectorAll(".shade h3");
-	for(i=0;i<subjects.length;i++){
-		subtags[i].innerHTML=subjects[i];
+  $barelement=$(" <div class='row'> <div class='col-md-12'><h2 class='fontsemibold text-center shade'>"+subjects[i]+"</h2> </div></div><div class='flexita'></div>")
+	$(".mainpart").append($barelement.clone());
+
+
 	}
 	 $.LoadingOverlay("hide");
 }
