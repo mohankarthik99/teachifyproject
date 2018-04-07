@@ -80,7 +80,6 @@ nameDecide(auth);
 		final+=replacement[i];
 	}
 	docref.where('UID',"==",auth.currentUser.uid).get().then(function(querySnapshot){
-		console.log(querySnapshot);
    querySnapshot.forEach((doc)=>{
 	if(doc.data().UID==auth.currentUser.uid){
 			checkPost=false;
@@ -96,10 +95,10 @@ nameDecide(auth);
     }).catch((error)=>{
     	alert("Something went wrong"+error.message);
     });
-	return nameSet(final);
+			return nameListener(auth); //Activate realtime listener for name and get the name
 	}// if new user
 
-		return nameSet(final); ///return exist namee
+			return nameListener(auth); //Activate realtime listener for name and get the name
 	}).catch(function(error){
 		alert("error"+error.message);
 	});
@@ -212,7 +211,6 @@ async function represent(year,dpt){
 var $template;
 var subjects=await getData(year,dpt);
 var uploads=retrieveDocs(subjects);
-console.log(uploads);
 var flexita="";
 if (subjects) {
 	for(let i=0;i<subjects.length;i++){
