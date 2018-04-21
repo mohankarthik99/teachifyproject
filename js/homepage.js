@@ -1,5 +1,4 @@
-var cool=[];
-var raj=[];
+
 (function(){
 
   var slideout = new Slideout({             ///slideout menu
@@ -43,82 +42,32 @@ slideout.on('close', function () {
 
  var auth=firebase.auth();
 const firestore=firebase.firestore();
-const logout=document.querySelector("#logout"); 
+const logout=document.querySelector("#logout");
 var docref=firestore.collection("teachers");
 const checkdetails=document.getElementById("checkdetails");
-var signout=false;
+var signIn=false;
+var signOut=false;
 
 
 
 auth.onAuthStateChanged((authdata)=>{ //Main controller
-	if(authdata){
-nameDecide(auth);
+	if (authdata) {
+		signIn=true;
+		nameListener(auth);
+	}else if(signIn==false){
+		window.location.href="404.html"
 	}
-	else{
-		if(!(signout)){
-		alert("Please Login first");
+else if(signOut){
 		window.location.href="index.html"
-	}
 	}
 });
 
 
-/*    Distinguishing between Signup and login and displaying the name of the user
-*/var nameDecide=function(auth){
-		var final="";
-	if(location.search){
-		return  function(){
-				var replacement=location.search.replace(/%20/g,"");
-				if(replacement.indexOf("%20")>=0){
-					replacement.replace(/%20/g,"");
-				}
-	
-           var start=replacement.indexOf("=");
-           var checkPost=true;
-	var end=replacement.indexOf("&");
-	for(var i=start+1;i<end;i++){
-		final+=replacement[i];
-	}
-	docref.where('UID',"==",auth.currentUser.uid).get().then(function(querySnapshot){
-   querySnapshot.forEach((doc)=>{
-	if(doc.data().UID==auth.currentUser.uid){
-			checkPost=false;
-			final=doc.data().name;
-			}
-    });
-			
-		if(checkPost){
-			  docref.add({
-    	'UID':auth.currentUser.uid,
-    	'name':final,
-    	'email':auth.currentUser.email
-    }).catch((error)=>{
-    	alert("Something went wrong"+error.message);
-    });
-			return nameListener(auth); //Activate realtime listener for name and get the name
-	}// if new user
-
-			return nameListener(auth); //Activate realtime listener for name and get the name
-	}).catch(function(error){
-		alert("error"+error.message);
-	});
-	
-		}();
-
-	}
-	else{
-		return function(){
-			return nameListener(auth); //Activate realtime listener for name and get the name
-		}();
-	}
-}
 
 
 //Realtime listener for name
 function nameListener(auth){
 	docref.where("UID","==",auth.currentUser.uid).onSnapshot((querySnapshot)=>{
-					raj.push(querySnapshot);
-
 querySnapshot.forEach((doc)=>{
 	if(doc.exists){
 		document.querySelector("#username").innerHTML=(doc.data().name);
@@ -194,8 +143,8 @@ uploads[search]=dbRef.where("metaData.subject","==",search).orderBy("metaData.up
 			{
 			arrdocs.push(doc.data());
 		}
-			
-			
+
+
 		});
 		return arrdocs;
 	}).catch((error)=>{
@@ -268,9 +217,7 @@ window.open("uploads.html?uid="+document.querySelector('#username').innerHTML+"&
 
 logout.addEventListener("click",function(){ //Logout button
 firebase.auth().signOut().then(function(){
-        signout=true;
-		alert("You have been signed out");
-		window.open("index.html","_self");
+        signOut=true;
 	}).catch(function(error){
        console.log(error.message);
 	});

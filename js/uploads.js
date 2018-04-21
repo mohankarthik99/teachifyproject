@@ -176,6 +176,7 @@ event.preventDefault();
   var urltopost=uploader1.value;
   var downloadurl="";
    var fileType;
+      var myUpload;
 
   if(radiofile.checked && uploader.value){
 
@@ -189,7 +190,8 @@ event.preventDefault();
   var dbRef=store.ref();
 
   if(yearvalue=="firstyear"){
-   var firstyearupload=  dbRef.child("uploads/"+yearvalue+"/"+fileDetails[3]).put(fileDetails[0],validation);
+    myUpload = dbRef.child("uploads/" + yearvalue + "/" + fileDetails[3]);
+   var firstyearupload= myUpload.put(fileDetails[0],validation);
 
   firstyearupload.on('state_changed',function(snapshot){
   var rate=Math.floor((snapshot.bytesTransferred/snapshot.totalBytes*100));
@@ -204,11 +206,12 @@ event.preventDefault();
   alert(error.message);
   },function(success){
     downloadurl=firstyearupload.snapshot.downloadURL;
-    firebaseUpload(yearvalue,downloadurl,fileType,validation.size,titlevalue,descvalue,subvalue);
+    firebaseUpload(yearvalue,downloadurl,fileType,validation.size,titlevalue,descvalue,subvalue,myUpload.fullPath);
   });//realtimelistener
   }
   else{
-  var uploadyears=  dbRef.child("uploads/"+yearvalue+"/"+"/"+deptvalue+"/"+fileDetails[3]).put(fileDetails[0],validation);
+    myUpload = dbRef.child("uploads/" + yearvalue + "/" + "/" + deptvalue + "/" + fileDetails[3]);
+  var uploadyears=  myUpload.put(fileDetails[0],validation);
   uploadyears.on('state_changed',function(snapshot){
 
   var rate=snapshot.bytesTransferred/snapshot.totalBytes*100;
@@ -218,7 +221,7 @@ event.preventDefault();
   alert(error.message);
   },function(success){
     downloadurl=uploadyears.snapshot.downloadURL;
-    firebaseUpload(yearvalue,downloadurl,fileType,validation.size,titlevalue,descvalue,subvalue);
+    firebaseUpload(yearvalue,downloadurl,fileType,validation.size,titlevalue,descvalue,subvalue,myUpload.fullPath);
   });//realtimelistener
   }
 
@@ -231,7 +234,7 @@ else if((radiolink.checked) && (uploader1.value) && (yearvalue!="Select the Year
 downloadurl=uploader1.value;
 fileType="link";
 let size="txtbytes";
-    firebaseUpload(yearvalue,downloadurl,fileType,size,titlevalue,descvalue,subvalue);
+    firebaseUpload(yearvalue,downloadurl,fileType,size,titlevalue,descvalue,subvalue,"youtube");
 
 
 }
@@ -288,7 +291,7 @@ else{
 
 }//validate function end
 
-function firebaseUpload(year,downloadurl,filetype,filesize,titlevalue,descvalue,subvalue){ //push to firestore
+function firebaseUpload(year,downloadurl,filetype,filesize,titlevalue,descvalue,subvalue,fileRef){ //push to firestore
 const dbRef=firestore.collection("Teacheruploads");
 dbRef.add({
   metaData:{
@@ -301,6 +304,7 @@ dbRef.add({
   uploadInfo:{
    comments:descvalue,
    filePath:downloadurl,
+   fileRef:fileRef,
    title:titlevalue,
    uid:firebase.auth().currentUser.uid,
    teacherName:staffname

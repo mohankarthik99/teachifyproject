@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/hamburgers.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="vendor/animate/animate.css">
+<style>
+    .zoomIn{
+        animation-duration: 350ms;
+    }
+
+    .modal{
+        display: none;
+        position: fixed;
+        background: dimgrey;
+        background: rgba(0,0,0,0.4);
+        width: 100%;
+        padding-top: 200px;
+        height: 100%;
+        z-index: 150;
+        top:0;
+    }
+    .modal-content{
+        overflow: auto;
+        min-width: 50%;
+        background: white;
+        box-shadow: 5px 0px 30px 10px rgba(0,0,0,0.4);
+    }
+</style>
+
+</head>
+
+<body>
+    <nav id="menu" class="slideout-menu">
+        <header>
+            <h3 class="fontbold text-center">Dashboard</h3>
+            <div class="flexit">
+                <button class="btn btn-info fontsemibold" id="username">Please wait..</button>
+
+            </div>
+            <br>
+            <br>
+            <ul class="navown">
+                <li id="active-li">
+                    <a href="home.html">Home</a>
+                </li>
+                <hr>
+                <li>
+                    <a href="">Upload history</a>
+                </li>
+                <hr>
+                <li>
+                    <a href="uploads.html" id="uploadpage">New Upload</a>
+                </li>
+                <hr>
+                <li>
+                    <a href="">User Profile</a>
+                </li>
+                <li id="logout">
+                    <a href="">Logout</a>
+                </li>
+
+            </ul>
+
+        </header>
+    </nav>
+
+    <header class="head">
+        <button style="color:white" class="hamburger hamburger--arrowalt" id="cool" type="button">
+            <span class="hamburger-box">
+                <span style="background: white" class="hamburger-inner"></span>
+            </span>
+        </button>
+    </header>
+    <main id="panel" class="slideout-panel">
+        <div id="modal1" class="modal clear-fix">
+            <div class="modal-content clearfix">
+                <div class="header">
+                    <h2>Warning! This cannot be reversed </h2>
+<div class="close">
+
+    <button type="button" class="btn btn-large btn-block btn-default"><i class="fas fa-window-close fa-2x" style="color: black"></i></button>
+</div>
+                </div>
+
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi ad ipsum tempora earum est! Atque inventore quibusdam sit tempore neque incidunt consequuntur, aliquam beatae perferendis, explicabo autem officia voluptate dolores!</p>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="col-md-12">
+
+<button type="button" id=terminate class="btn btn-large btn-block btn-danger animated fadeInUp">Terminate?</button>
+
+           </div>
+           </div>
+        </main>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<script src="js/fontawesome-all.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
+        authDomain: "teachifyppc.firebaseapp.com",
+        databaseURL: "https://teachifyppc.firebaseio.com",
+        projectId: "teachifyppc",
+        storageBucket: "teachifyppc.appspot.com",
+        messagingSenderId: "702587918647"
+    };
+    firebase.initializeApp(config);
+</script>
+<script src="js/slideout.min.js"></script>
+<script>
+    var slideout = new Slideout({
+        'panel': document.getElementById('panel'),
+        'menu': document.getElementById('menu'),
+        'padding': 225,
+        'tolerance': 70
+    });
+    document.querySelector('#cool').addEventListener('click', function () {
+        this.classList.toggle("is-active");
+        slideout.toggle();
+    });
+
+
+
+    var fixed = document.querySelector('.head');
+
+    slideout.on('translate', function (translated) {
+        fixed.style.transform = 'translateX(' + translated + 'px)';
+    });
+
+    slideout.on('beforeopen', function () {
+        fixed.style.transition = 'transform 300ms ease';
+        fixed.style.transform = 'translateX(225px)';
+    });
+
+    slideout.on('beforeclose', function () {
+        fixed.style.transition = 'transform 300ms ease';
+        fixed.style.transform = 'translateX(0px)';
+    });
+
+    slideout.on('open', function () {
+        fixed.style.transition = '';
+    });
+
+    slideout.on('close', function () {
+        fixed.style.transition = '';
+    });
+</script>
+<script src="js/destruct.js"></script>
+        </body>
+        </html>
