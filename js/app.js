@@ -21,19 +21,18 @@ login.addEventListener("click",function(event){
 const  txtEmail=email.value;
 const txtpass=password.value;
 
-const getpromise=auth.signInWithEmailAndPassword(txtEmail,txtpass);
-
-getpromise.catch(function(error){
-    $.LoadingOverlay("hide");
+const getpromise=auth.signInWithEmailAndPassword(txtEmail,txtpass).then(()=>window.open("home.html","_self")).catch(()=>{
+  $.LoadingOverlay("hide");
   alert(error.message);
-})
+});
+
+
 
 });
 /*realtime listener
 */
 
 auth.onAuthStateChanged(function(authdata){
-  console.log(authdata==firebase.auth().currentUser);
   if(authdata){
         $.LoadingOverlay("hide");
   }else{

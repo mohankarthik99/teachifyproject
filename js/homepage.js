@@ -135,16 +135,10 @@ const year=document.querySelector("#year");
 	var uploads={};
 	for(let i=0;i<subs.length;i++){
 	search=subs[i];
-uploads[search]=dbRef.where("metaData.subject","==",search).orderBy("metaData.uploadTimeStamp","desc").get().then((snapshot)=>{
+uploads[search]=dbRef.where("metaData.subject","==",search).where("metaData.year","==",year.value).orderBy("metaData.uploadTimeStamp","desc").get().then((snapshot)=>{
 	var arrdocs=[];
 		snapshot.forEach((doc)=>{
-				var docs=doc.data();
-			if(docs.metaData.year==year.value)
-			{
 			arrdocs.push(doc.data());
-		}
-
-
 		});
 		return arrdocs;
 	}).catch((error)=>{

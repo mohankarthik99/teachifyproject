@@ -10,29 +10,44 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="vendor/animate/animate.css">
-<style>
-    .zoomIn{
-        animation-duration: 350ms;
-    }
+    <style>
+        .zoomIn {
+            animation-duration: 350ms;
+        }
 
-    .modal{
-        display: none;
-        position: fixed;
-        background: dimgrey;
-        background: rgba(0,0,0,0.4);
-        width: 100%;
-        padding-top: 200px;
-        height: 100%;
-        z-index: 150;
-        top:0;
-    }
-    .modal-content{
-        overflow: auto;
-        min-width: 50%;
-        background: white;
-        box-shadow: 5px 0px 30px 10px rgba(0,0,0,0.4);
-    }
-</style>
+        .modal {
+            display: none;
+            position: fixed;
+            background: dimgrey;
+            background: rgba(0, 0, 0, 0.4);
+            width: 100%;
+            padding-top: 200px;
+            height: 100%;
+            z-index: 1500;
+            top: 0;
+        }
+
+        .modal-content {
+            position: none;
+            background: white;
+            box-shadow: 5px 0px 30px 10px rgba(0, 0, 0, 0.4);
+        }
+        .card{
+            position: relative;
+            padding-left:8px;
+            padding-right:8px;
+        }
+        .addition{
+position: absolute;
+top:10px;
+right:0;
+        }
+        .detect{
+position: absolute;
+top:10px;
+left:0;
+        }
+    </style>
 
 </head>
 
@@ -79,86 +94,119 @@
         </button>
     </header>
     <main id="panel" class="slideout-panel">
-        <div id="modal1" class="modal clear-fix">
-            <div class="modal-content clearfix">
-                <div class="header">
-                    <h2>Warning! This cannot be reversed </h2>
-<div class="close">
+        <div id="modal1" class="modal">
+            <div class="container-fluid">
+                <div class="modal-content">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-sm-12">
+                            <h2 class="fontbold black text-center" style="color:firebrick">Warning!</h2>
+                        </div>
+                    </div>
 
-    <button type="button" class="btn btn-large btn-block btn-default"><i class="fas fa-window-close fa-2x" style="color: black"></i></button>
-</div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-center fontsemibold black">This process will delete all the current upload and move it to another stack</p>
+                            <div class="flexit" style="display: flex">
+                                <button class="btn btn-danger" style="flex:1">Yes</button>
+                                <div class="closes" style="flex:1">
+                                    <button class="btn btn-info" style="width: 100%">No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi ad ipsum tempora earum est! Atque inventore quibusdam sit tempore neque incidunt consequuntur, aliquam beatae perferendis, explicabo autem officia voluptate dolores!</p>
+        </div>
+        </div>
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="shade">New Semster stack change</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <h2 class="fontbold text-center wait" style="color: black;">Please wait</h2>
+                <div class="col-md-12 after" style="display: none">
+                    <form>
+                        <h3 class="shade">First year</h3>
+                        <div class="flexit" id="firstyear"></div>
+                        <h3 class="shade">Second year</h3>
+                        <div class="flexit" id="secondyear"></div>
+                        <h3 class="shade">Third year</h3>
+                        <div class="flexit" id="thirdyear"></div>
+                    <input type="submit" value="Begin process" id="terminate" class="btn btn-large btn-block btn-danger fontsemibold">
+
+                    </form>
+
+                </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="col-md-12">
+    </main>
 
-<button type="button" id=terminate class="btn btn-large btn-block btn-danger animated fadeInUp">Terminate?</button>
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-           </div>
-           </div>
-        </main>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="js/fontawesome-all.min.js"></script>
 
-<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-<script src="js/fontawesome-all.min.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
-<script>
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
-        authDomain: "teachifyppc.firebaseapp.com",
-        databaseURL: "https://teachifyppc.firebaseio.com",
-        projectId: "teachifyppc",
-        storageBucket: "teachifyppc.appspot.com",
-        messagingSenderId: "702587918647"
-    };
-    firebase.initializeApp(config);
-</script>
-<script src="js/slideout.min.js"></script>
-<script>
-    var slideout = new Slideout({
-        'panel': document.getElementById('panel'),
-        'menu': document.getElementById('menu'),
-        'padding': 225,
-        'tolerance': 70
-    });
-    document.querySelector('#cool').addEventListener('click', function () {
-        this.classList.toggle("is-active");
-        slideout.toggle();
-    });
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase-firestore.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDZm7vKexSfn9IcqYdn1cFBKfdJOF0k2dM",
+            authDomain: "teachifyppc.firebaseapp.com",
+            databaseURL: "https://teachifyppc.firebaseio.com",
+            projectId: "teachifyppc",
+            storageBucket: "teachifyppc.appspot.com",
+            messagingSenderId: "702587918647"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="js/slideout.min.js"></script>
+    <script>
+        var slideout = new Slideout({
+            'panel': document.getElementById('panel'),
+            'menu': document.getElementById('menu'),
+            'padding': 225,
+            'tolerance': 70
+        });
+        document.querySelector('#cool').addEventListener('click', function () {
+            this.classList.toggle("is-active");
+            slideout.toggle();
+        });
 
 
 
-    var fixed = document.querySelector('.head');
+        var fixed = document.querySelector('.head');
 
-    slideout.on('translate', function (translated) {
-        fixed.style.transform = 'translateX(' + translated + 'px)';
-    });
+        slideout.on('translate', function (translated) {
+            fixed.style.transform = 'translateX(' + translated + 'px)';
+        });
 
-    slideout.on('beforeopen', function () {
-        fixed.style.transition = 'transform 300ms ease';
-        fixed.style.transform = 'translateX(225px)';
-    });
+        slideout.on('beforeopen', function () {
+            fixed.style.transition = 'transform 300ms ease';
+            fixed.style.transform = 'translateX(225px)';
+        });
 
-    slideout.on('beforeclose', function () {
-        fixed.style.transition = 'transform 300ms ease';
-        fixed.style.transform = 'translateX(0px)';
-    });
+        slideout.on('beforeclose', function () {
+            fixed.style.transition = 'transform 300ms ease';
+            fixed.style.transform = 'translateX(0px)';
+        });
 
-    slideout.on('open', function () {
-        fixed.style.transition = '';
-    });
+        slideout.on('open', function () {
+            fixed.style.transition = '';
+        });
 
-    slideout.on('close', function () {
-        fixed.style.transition = '';
-    });
-</script>
-<script src="js/destruct.js"></script>
-        </body>
-        </html>
+        slideout.on('close', function () {
+            fixed.style.transition = '';
+        });
+    </script>
+    <script src="js/destruct.js"></script>
+</body>
+
+</html>
