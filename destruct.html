@@ -25,14 +25,19 @@
             background: dimgrey;
             background: rgba(0, 0, 0, 0.4);
             width: 100%;
-            padding-top: 200px;
             height: 100%;
             z-index: 1500;
             top: 0;
         }
 
         .modal-content {
-            position: none;
+position: absolute;
+min-width:256px;
+  bottom:50vh;
+  transform:translateY(50%);
+  left:20vw;
+ right:20vw;
+
             background: white;
             box-shadow: 5px 0px 30px 10px rgba(0, 0, 0, 0.4);
         }
@@ -52,6 +57,16 @@ position: absolute;
 top:10px;
 left:0;
         }
+.progress{
+    position: absolute;
+    width:100%;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+
+
+
     </style>
 
 </head>
@@ -113,7 +128,7 @@ left:0;
                         <div class="col-md-12">
                             <p class="text-center fontsemibold black">This process will delete all the current upload and move it to another stack</p>
                             <div class="flexit" style="display: flex">
-                                <button class="btn btn-danger" style="flex:1">Yes</button>
+                                <button class="btn btn-danger proceed" style="flex:1">Yes</button>
                                 <div class="closes" style="flex:1">
                                     <button class="btn btn-info" style="width: 100%">No</button>
                                 </div>
@@ -135,7 +150,13 @@ left:0;
             </div>
 
             <div class="row">
-                <h2 class="fontbold text-center wait" style="color: black;">Please wait</h2>
+                <h2 class="temp fontbold text-center wait" style="color: black;">Please wait</h2>
+                <div class="progress temp">
+<div class="loader progress-bar progress-bar-danger ">
+    0%
+</div>
+                </div>
+
                 <div class="col-md-12 after" style="display: none">
                     <form>
                         <h3 class="shade">First year</h3>
@@ -154,7 +175,7 @@ left:0;
     </main>
 
     <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="js/fontawesome-all.min.js"></script>

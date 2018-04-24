@@ -5,6 +5,10 @@ var signIn=false;
 var signOut=false;
 const pleaseWait=document.querySelector(".wait");
 const displaycontain=document.querySelector(".after");
+const formsubmit=document.querySelector("form");
+const progress=document.querySelector(".progress-bar")
+progress.style.width="20%";
+    progress.innerHTML = progress.style.width;
     auth.onAuthStateChanged((authdata) => { //Main controller
         if (authdata) {
             signIn = true;
@@ -43,6 +47,7 @@ const displaycontain=document.querySelector(".after");
             alert(error.message)
         });
     }
+//Adding event listener to form submit
 
 var waitIndex=0;
 var content;
@@ -58,32 +63,33 @@ else{
     pleaseWait.textContent="Please wait"
 }
 },500);
-    document.querySelector("#terminate").addEventListener("click", function () {
-        document.querySelector(".modal").style.display = "block";
-        if (document.querySelector(".modal-content").classList.contains("zoomOut")) {
-            document.querySelector(".modal-content").classList.replace("zoomOut", "zoomIn");
-        }
-        else {
-            document.querySelector(".modal-content").classList.add("animated", "zoomIn");
-        }
-    });
-    for (index of document.querySelectorAll(".closes"))
-    {
-index.addEventListener("click", function () {
-            document.querySelector(".modal-content").classList.remove("animated", "zoomIn");
-            document.querySelector(".modal-content").classList.add("animated", "zoomOut");
 
-            setTimeout(function () { document.querySelector(".modal").style.display = "none"; }, 700)
-        });
-    }
+//modal window js
+   for (index of document.querySelectorAll(".closes")) {
+       index.addEventListener("click", function () {
+           document.querySelector(".modal-content").classList.remove("animated", "zoomIn");
+           document.querySelector(".modal-content").classList.add("animated", "zoomOut");
 
-
-    window.onclick = function (event) {
-        if (event.target == document.querySelector(".modal")) {
-            document.querySelector(".modal").style.display = "none";
+           setTimeout(function () {
+               document.querySelector(".modal").style.display = "none";
+           }, 700)
+       });
+   }
+       window.onclick = function (event) {
+           if (event.target == document.querySelector(".modal")) {
+               document.querySelector(".modal").style.display = "none";
+           }
+           else if(event.target == document.querySelector(".proceed")){
+     processData();
         }
 
-    }
+       }
+//--------------------------------------------------------///
+
+
+
+
+
 
     //SUBJECTS
     function getData(year, dpt) { //getting the data and digging deep enough to get the subject names  to the subjects array
@@ -131,6 +137,7 @@ index.addEventListener("click", function () {
     }
 
     async function subjectFetch(){
+
         var subject={
             firstyear:{},
             secondyear:{},
@@ -146,11 +153,24 @@ index.addEventListener("click", function () {
          {
              subject.thirdyear[dept] = await getData("thirdyear", dept)
          }
-         return subject;
+        progress.style.width = "100%";
+        progress.innerHTML="100%"
+        var delay=new Promise((resolve,reject)=>{
+            setTimeout(() => {
+                resolve(console.log("delay added"));
+            }, 1000);
+        });
+       return  delay.then((data)=>{
+            return subject;
+        })
     }
 
     (async function domManipulate(){
+        progress.style.width = "60%";
+progress.classList.replace("progress-bar-danger","progress-bar-success");
+progress.innerHTML=progress.style.width;
      var subjectData=await subjectFetch();
+
      var cardData;
      Object.keys(subjectData).forEach((elem)=>{
 
@@ -172,26 +192,33 @@ assignController("true");
     }
 
     else{
-Object.keys(subjectData[elem]).forEach((data)=>{
+
+
+
+Object.keys(subjectData[elem]).forEach((data,index)=>{
     var card = document.createElement("div");
     card.classList.add("card");
     var innercontent = "<h3 class='fontbold text-center' style='color:black;'>"+data+"</h3>";
     innercontent += "<div class='addition'><i class='fas fa-plus-circle fa-3x'></i></div><div class='detect'><i class='fas fa-minus-circle fa-3x'></i></div>";
-
 subjectData[elem][data].forEach((data,index)=>{
 innercontent+="<label>Subject "+(index+1)+"</label><input type='text' class='form-control' value='"+data+"' required>";
 });
 card.innerHTML = innercontent;
 document.querySelector("#"+elem).appendChild(card);
+
     assignController("",cardData);
+
 });
 
 
     }
 
      });
+
         clearInterval(waiting);
-        pleaseWait.style.display = "none";
+        document.querySelector(".temp").style.display = "none";
+        document.querySelector(".progress").style.display="none";
+        pleaseWait.style.display="none";
         displaycontain.style.display = "block";
     })();
 
@@ -239,6 +266,64 @@ function assignController(data,card){
 })();
     }
 
+}
+function modalData(d){
+    d.preventDefault();
+      document.querySelector(".modal").style.display = "block";
+      if (document.querySelector(".modal-content").classList.contains("zoomOut")) {
+          document.querySelector(".modal-content").classList.replace("zoomOut", "zoomIn");
+      } else {
+          if (!(document.querySelector(".modal-content").classList.contains("animated"))) {
+              document.querySelector(".modal-content").classList.add("animated", "zoomIn");
+
+          } else {
+              document.querySelector(".modal-content").classList.add("zoomIn");
+          }
+      }
+
+}
+
+
+
+formsubmit.addEventListener("submit", modalData);
+
+function processData(){
+var cards=document.querySelectorAll(".card");
+var subjectDoc={};
+
+cards.forEach((data,index)=>{
+if(index==0){
+    console.log(data.childNodes.length);
+    subjectDoc["backupfirstyear"] = {};
+    for(let i=3;i<data.childNodes.length;i++){
+           if(i%2===0){
+           var label=data.childNodes[i-1].innerHTML.replace(" ","").toLowerCase();
+           var content=data.childNodes[i].value;
+           subjectDoc["backupfirstyear"][label]={}
+           subjectDoc["backupfirstyear"][label]["name"]=content;
+           }
+    }
+
+}else{
+
+var deptname=data.childNodes[0].innerHTML.toLowerCase();
+console.log(deptname);
+var year="backup"+data.parentElement.id;
+if(!(subjectDoc[year])){
+    subjectDoc[year] = {};
+}
+subjectDoc[year][deptname]={};
+    for (let i = 3; i < data.childNodes.length; i++) {
+        if (i % 2 === 0) {
+            var label = data.childNodes[i - 1].innerHTML.replace(" ", "").toLowerCase();
+            var content = data.childNodes[i].value;
+            subjectDoc[year][deptname][label] = {}
+            subjectDoc[year][deptname][label]["name"] = content;
+        }
+    }
+}
+});
+    console.log(subjectDoc);
 }
 
 })();
