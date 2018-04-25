@@ -79,7 +79,9 @@
 		});
 	}
 
-
+	var guide = firestore.collection("guide").doc('instructions').get()
+	.then((doc) => [doc.data().collections.current, doc.data().subjects.current])
+	.catch(()=>alert(error.message));
 
 	//Generate html  subjects
 	checkdetails.addEventListener("click", function () {
@@ -90,10 +92,11 @@
 		represent(year.value, dpt.value);
 	});
 
-	function getData(year, dpt) { //getting the data and digging deep enough to get the subject names  to the subjects array
+	async function getData(year, dpt) { //getting the data and digging deep enough to get the subject names  to the subjects array
 		var details;
 		var subjects = [];
-		const dbRef = firestore.collection("subjects").doc(year);
+		var guidepath=await guide;
+		const dbRef = firestore.collection(guidepath[1]).doc(year);
 		return dbRef.get().then((doc) => {
 			details = doc.data();
 		}).then(() => {
@@ -133,8 +136,9 @@
 
 	}
 
-	var retrieveDocs = function (subs) {
-		const dbRef = firestore.collection("Teacheruploads");
+	async var retrieveDocs = function (subs) {
+		var guidepath = await guide;
+		const dbRef = firestore.collection(guidepath[0]);
 		const year = document.querySelector("#year");
 		var uploads = {};
 		for (let i = 0; i < subs.length; i++) {
