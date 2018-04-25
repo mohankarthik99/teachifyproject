@@ -96,6 +96,8 @@
 		var details;
 		var subjects = [];
 		var guidepath=await guide;
+		console.log(guidepath[1]);
+
 		const dbRef = firestore.collection(guidepath[1]).doc(year);
 		return dbRef.get().then((doc) => {
 			details = doc.data();
@@ -129,6 +131,7 @@
 				}
 
 			});
+			console.log(subjects);
 			return subjects;
 		}).catch((error) => {
 			alert(error.message);
@@ -136,8 +139,9 @@
 
 	}
 
-	async var retrieveDocs = function (subs) {
+	async function retrieveDocs(subs) {
 		var guidepath = await guide;
+		console.log(guidepath[0]);
 		const dbRef = firestore.collection(guidepath[0]);
 		const year = document.querySelector("#year");
 		var uploads = {};
@@ -181,7 +185,9 @@
 		var $barelement;
 		var $template;
 		var subjects = await getData(year, dpt);
-		var uploads = retrieveDocs(subjects);
+		console.log(subjects[1]);
+		var uploads = await retrieveDocs(subjects);
+		console.log(uploads);
 		var flexita = "";
 		if (subjects) {
 			for (let i = 0; i < subjects.length; i++) {
