@@ -220,6 +220,7 @@ document.querySelector("#"+elem).appendChild(card);
         document.querySelector(".progress").style.display="none";
         pleaseWait.style.display="none";
         displaycontain.style.display = "block";
+        document.querySelector(".afters").style.display = "flex";
     })();
 
 function assignController(data,card){
@@ -290,6 +291,7 @@ formsubmit.addEventListener("submit", modalData);
 function processData(){
 var cards=document.querySelectorAll(".card");
 var subjectDoc={};
+subjectDoc.scheme=document.querySelector("input[type='text']").value;
 
 cards.forEach((data,index)=>{
 if(index==0){
@@ -323,7 +325,10 @@ subjectDoc[year][deptname]={};
     }
 }
 });
-    console.log(subjectDoc);
 }
+//Subjects
+//stack like architecture
+//uploads storage-->new random directory which will be used here on forth while
+//Teacher uploads collection
 
 })();

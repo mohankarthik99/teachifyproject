@@ -30,7 +30,7 @@ firebase.auth().signOut().then(function(){
 
     var staffname=location.search.substring(location.search.indexOf("=")+1,location.search.lastIndexOf("&"));
     $('#username').html(staffname);
-  
+
 //-------------------------------------------------------------------------------------------------------------//---------------------------//--------------------//
 
 const titlecard=document.querySelector('#titlecard');
@@ -50,78 +50,102 @@ const uploader1=document.querySelector("#uploader1"); //upload file element
 const cardflip=document.querySelector(".cardupload");
 const firestore=firebase.firestore();
 const store=firebase.storage();
+var guides=[];
+var subjects={};
 
 //Get the subjects from firebase
-var subjects={
+var guide={
+  check:function(){
+    return firestore.collection("guide").get().then((docs)=>{
+  var subArr=[];
+  docs.forEach((datas)=>{
+   Object.keys(datas.data()).forEach((elem)=>{
+     console.log(elem);
+     subArr.push(datas.data()[elem].current);
+  });
 
-first:function(){
-   const dbRef=firestore.collection('subjects').doc("firstyear");
-        var subarr=[];
-   return dbRef.get().then((doc)=>{
-     var details=doc.data();
-     
-     Object.keys(details).forEach((data)=>{
-     
-     Object.keys(details[data]).forEach((stream)=>{
-      if(stream=="name"){
-        subarr.push(details[data][stream]);
-      }
-     })
-     });
+  });
+  return subArr;
+}).catch((error)=>console.log(error.message));
+  }
+};
 
-     return subarr;
-   }).catch((error)=>{
-    console.log(error.message);
-   })
+guide.check().then((subarrs)=>{
+  for(every of subarrs){
+    guides.push(every);
+  }
+  subjects.first = function () {
+    const dbRef = firestore.collection(guides[2]).doc("firstyear");
+    var subarr = [];
+    return dbRef.get().then((doc) => {
+      var details = doc.data();
 
-  }(),
-  second:function(){
-         const dbRef=firestore.collection('subjects').doc("secondyear");
-       var subarr=[[],[],[],[]];
-       var i=0;
-   return dbRef.get().then((doc)=>{
-     var details=doc.data();
-     Object.keys(details).forEach((data)=>{
- Object.keys(details[data]).forEach((stream)=>{
-     
-     Object.keys(details[data][stream]).forEach((streamdata)=>{
-      if(streamdata=="name"){
-        subarr[i].push(details[data][stream][streamdata]);
-      }
-     })
-     });
- i+=1;
-     });
-    
+      Object.keys(details).forEach((data) => {
+
+        Object.keys(details[data]).forEach((stream) => {
+          if (stream == "name") {
+            subarr.push(details[data][stream]);
+          }
+        })
+      });
+
       return subarr;
-   }).catch((error)=>{
-    console.log(error.message);
-   })
-  }(),
-   third:function(){
-         const dbRef=firestore.collection('subjects').doc("thirdyear");
-       var subarr=[[],[],[],[]];
-       var i=0;
-   return dbRef.get().then((doc)=>{
-     var details=doc.data();
-     Object.keys(details).forEach((data)=>{
- Object.keys(details[data]).forEach((stream)=>{
-     
-     Object.keys(details[data][stream]).forEach((streamdata)=>{
-      if(streamdata=="name"){
-        subarr[i].push(details[data][stream][streamdata]);
-      }
-     })
-     });
- i+=1;
-     });
-          return subarr;
-   }).catch((error)=>{
-    console.log(error.message);
-   })
+    }).catch((error) => {
+      console.log(error.message);
+    })
+
+  }();
+  subjects.second = function () {
+    const dbRef = firestore.collection(guides[2]).doc("secondyear");
+    var subarr = [[], [], [], []];
+    var i = 0;
+    return dbRef.get().then((doc) => {
+      var details = doc.data();
+      Object.keys(details).forEach((data) => {
+        Object.keys(details[data]).forEach((stream) => {
+
+          Object.keys(details[data][stream]).forEach((streamdata) => {
+            if (streamdata == "name") {
+              subarr[i].push(details[data][stream][streamdata]);
+            }
+          })
+        });
+        i += 1;
+      });
+
+      return subarr;
+    }).catch((error) => {
+      console.log(error.message);
+    })
   }()
-}
-                        //resolved promise in subjects object  
+  subjects.third = function () {
+    const dbRef = firestore.collection(guides[2]).doc("thirdyear");
+    var subarr = [[], [], [], []];
+    var i = 0;
+    return dbRef.get().then((doc) => {
+      var details = doc.data();
+      Object.keys(details).forEach((data) => {
+        Object.keys(details[data]).forEach((stream) => {
+
+          Object.keys(details[data][stream]).forEach((streamdata) => {
+            if (streamdata == "name") {
+              subarr[i].push(details[data][stream][streamdata]);
+            }
+          })
+        });
+        i += 1;
+      });
+      return subarr;
+    }).catch((error) => {
+      console.log(error.message);
+    })
+  }();
+
+})
+
+
+
+                        //resolved promise in subjects object
 var updateSubjects=function(){
   var input=deptselect.value;
 var year=yearselect.value;
@@ -182,7 +206,7 @@ event.preventDefault();
 
         fileType=uploader.value.substring(uploader.value.lastIndexOf(".")+1,uploader.value.length).toLowerCase();
     var fileDetails=[uploader.files[0],fileType,uploader.files[0].size,uploader.files[0].name];
-  
+
 
     var validation=validate(fileDetails,yearvalue,deptvalue,subvalue,titlevalue,descvalue);
 
@@ -190,7 +214,7 @@ event.preventDefault();
   var dbRef=store.ref();
 
   if(yearvalue=="firstyear"){
-    myUpload = dbRef.child("uploads/" + yearvalue + "/" + fileDetails[3]);
+    myUpload = dbRef.child(guides[1]+"/"+ yearvalue + "/" + fileDetails[3]);
    var firstyearupload= myUpload.put(fileDetails[0],validation);
 
   firstyearupload.on('state_changed',function(snapshot){
@@ -292,7 +316,7 @@ else{
 }//validate function end
 
 function firebaseUpload(year,downloadurl,filetype,filesize,titlevalue,descvalue,subvalue,fileRef){ //push to firestore
-const dbRef=firestore.collection("Teacheruploads");
+const dbRef=firestore.collection(guides[0]);
 dbRef.add({
   metaData:{
   fileType:filetype,
@@ -388,4 +412,3 @@ desctxt.addEventListener("keyup",function(){
 
 
 
-  
