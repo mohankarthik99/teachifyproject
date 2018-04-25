@@ -33,8 +33,8 @@ getpromise.catch(function(error){
 */
 
 auth.onAuthStateChanged(function(authdata){
-  console.log(authdata==firebase.auth().currentUser);
   if(authdata){
+    window.open("home.html","_self");
         $.LoadingOverlay("hide");
   }else{
     console.log("user not  valid");
