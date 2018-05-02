@@ -7,6 +7,7 @@
     const displaycontain = document.querySelector(".after");
     const formsubmit = document.querySelector("form");
     const progress = document.querySelector(".progress-bar")
+    const scheme = document.querySelector("#schemeinput");
     progress.style.width = "20%";
     progress.innerHTML = progress.style.width;
     auth.onAuthStateChanged((authdata) => { //Main controller
@@ -15,8 +16,7 @@
             nameListener(auth);
         } else if (signIn == false) {
             window.location.href = "404.html"
-        }
-        else if (signOut) {
+        } else if (signOut) {
             window.location.href = "index.html"
         }
     });
@@ -27,6 +27,7 @@
             console.log(error.message);
         });
     });
+
 
     /*    Distinguishing between Signup and login and displaying the name of the user*/
 
@@ -57,8 +58,7 @@
         if (waitIndex < 4) {
             pleaseWait.textContent = content + ".";
             waitIndex += 1;
-        }
-        else {
+        } else {
             waitIndex = 0;
             pleaseWait.textContent = "Please wait"
         }
@@ -78,8 +78,7 @@
     window.onclick = function (event) {
         if (event.target == document.querySelector(".modal")) {
             document.querySelector(".modal").style.display = "none";
-        }
-        else if (event.target == document.querySelector(".proceed")) {
+        } else if (event.target == document.querySelector(".proceed")) {
             processData();
         }
 
@@ -113,12 +112,10 @@
                             });
 
                         });
-                    }
-                    else {
+                    } else {
                         return;
                     }
-                }
-                else {
+                } else {
                     Object.keys(details[data]).forEach((stream) => {
                         if (stream == "name") {
                             console.log(details[data][stream]);
@@ -144,7 +141,6 @@
             thirdyear: {}
         }
         var departments = ["cse", "eee", "ece", "mech"];
-        console.log("lol");
         subject.firstyear = await getData("firstyear", "cse");
         for (dept of departments) {
             subject.secondyear[dept] = await getData("secondyear", dept);
@@ -188,9 +184,7 @@
                 document.querySelector("#firstyear").appendChild(card);
                 assignController("true");
 
-            }
-
-            else {
+            } else {
 
 
 
@@ -215,6 +209,10 @@
         });
 
         clearInterval(waiting);
+        firestore.collection("subjects").doc("SCHEME").get().then((doc) => {
+            var schemeinfo = doc.data().scheme;
+            scheme.value = schemeinfo;
+        }).catch((error) => alert(error.message));
         document.querySelector(".temp").style.display = "none";
         document.querySelector(".progress").style.display = "none";
         pleaseWait.style.display = "none";
@@ -232,13 +230,11 @@
                 if (document.querySelector("#firstyear .card").childNodes.length > 9) {
                     document.querySelector("#firstyear .card").removeChild(document.querySelector("#firstyear .card").childNodes[document.querySelector("#firstyear .card").childNodes.length - 1]);
                     document.querySelector("#firstyear .card").removeChild(document.querySelector("#firstyear .card").childNodes[document.querySelector("#firstyear .card").childNodes.length - 1]);
-                }
-                else {
+                } else {
                     alert("A minimum of three subjects is needed");
                 }
             });
-        }
-        else {
+        } else {
             (function () {
                 var addbtn = document.querySelectorAll(".addition");
                 var currentPos = addbtn.length - 1;
@@ -265,6 +261,7 @@
         }
 
     }
+
     function modalData(d) {
         d.preventDefault();
         document.querySelector(".modal").style.display = "block";
@@ -289,6 +286,7 @@
         var cards = document.querySelectorAll(".card");
         var subjectDoc = {};
         subjectDoc.scheme = document.querySelector("input[type='text']").value;
+
 
         cards.forEach((data, index) => {
             if (index == 0) {
@@ -322,8 +320,65 @@
                 }
             }
         });
+        deleteProcess(subjectDoc);
     }
+
+    function randomGenerate(str) {
+        var finalstring = str + "-";
+        for (let i = 0; i < 6; i++) {
+            finalstring += Math.floor(Math.random() * (17 - 7) + 7).toString(16);
+
+        }
+        return finalstring;
+    }
+    var deleteFactory = function (type, guideloc,newsubs) {
+        var batch = firestore.batch();
+        var temp = {};
+        temp.type = type;
+        temp.randomname = randomGenerate(type);
+        temp.reference = guideloc;
+
+        temp.start = function () {
+            guideloc.get().then((doc) => doc.data()).then((data) => {
+                console.log(data);
+                if (data[this.type].backup) {
+                    while (this.randomname === data[this.type].backup){
+                        this.randomname = randomGenerate(this.type);
+                    }
+
+                } else {
+
+                    var sendingData = data;
+                    sendingData[this.type]["backup"] = data[this.type].current;
+                    sendingData[this.type]["current"] = this.randomname;
+
+                    batch.set(this.reference,sendingData);
+                    if(this.type=="subjects"){
+                        batch.set(firestore.collection(sendingData[this.type]["current"]).doc("SCHEME"),{scheme:newsubs.scheme})
+                        batch.set(firestore.collection(sendingData[this.type]["current"]).doc("firstyear"),newsubs.backupfirstyear);
+                        batch.set(firestore.collection(sendingData[this.type]["current"]).doc("secondyear"),newsubs.backupsecondyear);
+                        batch.set(firestore.collection(sendingData[this.type]["current"]).doc("thirdyear"),newsubs.backupthirdyear);
+                    }
+                    batch.commit().then(() => console.log("Successfully deleted")).catch((error) => alert(error.message));
+                }
+            });
+
+        }
+        return temp;
+
+    }
+    async function deleteProcess(subjectDoc) {
+        var guideRef = firestore.collection("guide").doc("instructions");
+        var subjects = deleteFactory("subjects", guideRef,subjectDoc);
+        subjects.start();
+     console.log(subjectDoc);
+        //subject deletion
+
+
+    }
+
     //Subjects
+
     //stack like architecture
     //uploads storage-->new random directory which will be used here on forth while
     //Teacher uploads collection
